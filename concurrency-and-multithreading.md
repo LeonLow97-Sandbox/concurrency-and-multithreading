@@ -32,3 +32,22 @@
     - Responsive applications that give the illusion of multitasking.
     - Efficient utilization of resources. Thread creation is light-weight in comparison to spawning a brand new process and for web servers that use threads, instead of creating a new process when fielding web requests, consume far fewer resources.
 - NOTE: More threads doesn't mean a faster application. There are cases where we want to avoid threads, especially when the application performs a lot of sequential operations.
+
+# Basic Concepts of Multithreading
+
+## Programs, Processes and Threads
+
+- **Programs**
+    - Operating systems can run multiple programs at the same time.
+    - For example, you are reading this article in the browser (a program) but you can also listen to music on your media player (another program).
+- **Processes**
+    - Used to execute the program.
+    - Each process is able to run concurrent subtasks called threads.
+- **Threads**
+    - Sub-tasks of processes and if synchronized correctly, can give the illusion that the application is performing everything at once.
+    - Without threads, you would have to write one program per task, run them as processes and synchronize them through the operating system.
+
+## Concurrency
+
+- Concurrency is the ability of your program to "deal" (not doing) with many things at once and is achieved through multithreading.
+- Do not confuse concurrency with parallelism which is about "doing" many things at once.
