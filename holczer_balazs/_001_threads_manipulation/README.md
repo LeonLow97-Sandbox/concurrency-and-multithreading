@@ -15,7 +15,7 @@ public static void main(String[] args) {
 - The reason for **multithreading** is to separate multiple (time-consuming) tasks that might be subjected to **interference by the execution of other tasks**.
 - With multithreading, can achieve better resource utilization and improve performance in the main.
 - For example (stock market application), the **application downloads real-time data from the web** and constructs time-series models (ARMA or ARIMA) based on the data.
-    - Solution: Use multithreading and a distinct thread for this time consuming operation and the application will not freeze.
+  - Solution: Use multithreading and a distinct thread for this time consuming operation and the application will not freeze.
 - Multithreading is the ability of the CPU to execute multiple processes or threads concurrently.
 - Both threads and processes are **independent sequences** of execution.
 
@@ -31,9 +31,9 @@ public static void main(String[] args) {
 ## Threads
 
 - A thread is a **light-weight** process.
-- It is a unit of execution *within a given process*, so a single process may contain several threads.
+- It is a unit of execution _within a given process_, so a single process may contain several threads.
 - Each **thread in a process shares the memory and resources**.
-- Creating new threads require *fewer resources* that creating new processes, does not affect the parent process.
+- Creating new threads require _fewer resources_ that creating new processes, does not affect the parent process.
 - Concurrent Programming: ensure that different threads in the same process are using the same memory.
 - The optimal number of threads is the number of processors (or processor cores) of the computer because this can make the application run parallel instead of a multithreaded application.
 
@@ -42,7 +42,7 @@ public static void main(String[] args) {
 - Time-slicing means that processing time is shared among processes and threads.
 - A single CPU has to deal with all the `k threads` in the application.
 - Processing time for a single processor is shared among multiple processes or threads.
-- The following diagram illustrates the time-slicing algorithm when the single processor handles *thread #1* for a short amount of time and then *thread #2*, and so on...
+- The following diagram illustrates the time-slicing algorithm when the single processor handles _thread #1_ for a short amount of time and then _thread #2_, and so on...
 
 <img src="./pics/time_slicing_algorithm.png" width="40%" />
 
@@ -59,10 +59,10 @@ public static void main(String[] args) {
 ## Downsides of Multithreading
 
 - Threads are manipulating data that are located on the **same memory area** because they belong the same process - synchronization is not that straight-forward.
-    - data may become inconsistent if multiple threads are manipulating the same data at the same time.
+  - data may become inconsistent if multiple threads are manipulating the same data at the same time.
 - Difficult to design and test/debug multithreaded applications.
 - **Using multiple threads is expensive** - CPU has to save local data, application pointer, etc. of the current thread and has to load the other thread as well.
-    - Switching between threads is a long operation. (expensive)
+  - Switching between threads is a long operation. (expensive)
 
 <img src="./pics/multithreading_disadvantage.png" width="40%" />
 
@@ -72,16 +72,74 @@ public static void main(String[] args) {
 ## Thread Lifecycle
 
 1. `New` State
-    - Every thread is in the new state until we call the `start()` method.
+   - Every thread is in the new state until we call the `start()` method.
 2. `Active` State
-    - When we call the `start()` method on the given thread.
-    - There are 2 sub-states:
-        - `runnable`: ready to be executed but may not be currently executing because CPU is running another thread due to the time-slicing algorithm.
-        - `running`: when the thread's turn comes, it enters the running state and executes the `run()` method.
+   - When we call the `start()` method on the given thread.
+   - There are 2 sub-states:
+     - `runnable`: ready to be executed but may not be currently executing because CPU is running another thread due to the time-slicing algorithm.
+     - `running`: when the thread's turn comes, it enters the running state and executes the `run()` method.
 3. `Blocked` / `Waiting` State
-    - In this state, a thread is temporarily inactive and not consuming CPU time.
-    - The thread may enter the blocked state or waiting state for various reasons, such as waiting for I/O operations, waiting for synchronization, or explicitly calling methods like `join()` or `sleep()`. 
-        - `join()`: waiting for another thread to be completed.
-    - The *Thread Scheduler* is responsible for resuming a blocked or waiting thread when the condition it was waiting for is satisfied.
+   - In this state, a thread is temporarily inactive and not consuming CPU time.
+   - The thread may enter the blocked state or waiting state for various reasons, such as waiting for I/O operations, waiting for synchronization, or explicitly calling methods like `join()` or `sleep()`.
+     - `join()`: waiting for another thread to be completed.
+   - The _Thread Scheduler_ is responsible for resuming a blocked or waiting thread when the condition it was waiting for is satisfied.
 4. `Terminated` State
-    - When a thread has finished it's task.
+   - When a thread has finished it's task.
+
+## 3 Methods to Start Threads
+
+1. Implementing the `Runner` interface
+
+```java
+class Runner2 implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Runner2: " + i);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Thread t2 = new Thread(new Runner2());
+        t1.start();
+    }
+}
+```
+
+2. Extending the `Thread` class
+
+```java
+class Runner1 extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Runner1: " + i);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Thread t1 = new Runner1();
+        t1.start();
+    }
+}
+```
+
+3. Creating a inline thread
+
+```java
+    public static void main(String[] args) {
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 10; i++) {
+                    System.out.println("Runner3: " + i);
+                }
+            }
+        });
+        t3.start();
+    }
+```
