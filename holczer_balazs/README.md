@@ -143,3 +143,8 @@ public class Main {
         t3.start();
     }
 ```
+
+## `sleep()`
+
+- `Thread.sleep()`, provide no. of milliseconds in the argument.
+- Throws an InterruptedException.
