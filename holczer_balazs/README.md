@@ -192,9 +192,33 @@ System.out.println("Finished with Threads...");
 - Usually we create daemon threads for I/O operations or services (smartphone services such as NFC or Bluetooth communication).
     - Can create a daemon thread for a smartphone application to look for smart-watches to pair with.
 - Daemon threads are **terminated by the JVM when all other worker threads are terminated** (finish execution).
+    - They do not prevent the JVM from exiting when all non-daemon threads have finished executing.
+    - When all worker threads have completed their execution, the JVM terminates any remaining daemon threads without allowing them to finish their work.
+    - Recommended to use daemon threads for tasks that are safe to be terminated abruptly and do not require precise completion.
 - *Main difference*: worker threads are not terminated while daemon threads are interrupted by the JVM.
 
 ```java
 // Setting a thread as a Daemon Thread
 t1.setDaemon(true);
+```
+
+## Thread Priority
+
+<img src="./pics/thread_priority.png" width="60%" />
+
+- Time-slicing algorithm is handled by Thread Scheduler.
+- Can assign a priority value (1-10) to every Thread
+    - default priority value is 5
+    - `MIN_PRIORITY`: 1
+    - `MAX_PRIORITY`: 10
+- Threads with the *same priority* value (default priority is 5) are executed in a **FIFS** (first-in-first-served) manner - the thread scheduler store the threads in a **queue**.
+- Higher priority threads are executed before lower priority threads but it depends on the underlying OS (thread starvation is avoided).
+    - E.g., main thread with default priority of 5 could be executed before threads with priority of 10.
+
+```java
+// Thread with priority 10
+Thread t = new Thread(new WorkerThread());
+
+t.setPriority(Thread.MAX_PRIORITY);
+t.start();
 ```
