@@ -328,3 +328,24 @@ public static void increment() {
 
 - This is called class level locking because we get the monitor lock (intrinsic lock) associated with the class.
 - Block level locks are generally recommended as they do not configure other execution in the method to be synchronized. So, only synchronized specific executions in the method.
+
+## Locking with Custom Objects
+
+```java
+private static final Object lock1 = new Object();
+private static final Object lock2 = new Object();
+
+public static void increment1() {
+    synchronized (lock1) {
+        counter1++;
+    }
+}
+
+public static void increment2() {
+    synchronized (lock2) {
+        counter2++;
+    }
+}
+```
+
+- Both methods are using independent locks.
