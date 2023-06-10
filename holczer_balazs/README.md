@@ -178,3 +178,23 @@ try {
 
 System.out.println("Finished with Threads...");
 ```
+
+# Daemon and Worker Threads
+
+- A thread in Java can be **daemon thread** or a standard **worker thread**.
+- When a Java program starts, then one thread begins running immediately, i.e., `main` thread. It starts the main method.
+- Can create child threads from the `main` thread. The main thread is the last thread to finish execution because it performs various shutdown operations.
+- **daemon threads** are intended as helper threads, e.g., for garbage collection.
+
+<img src="./pics/daemon_vs_worker_threads.png" width="40%" />
+
+- Daemon threads are *low priority* threads that run in the background to perform tasks such as garbage collection.
+- Usually we create daemon threads for I/O operations or services (smartphone services such as NFC or Bluetooth communication).
+    - Can create a daemon thread for a smartphone application to look for smart-watches to pair with.
+- Daemon threads are **terminated by the JVM when all other worker threads are terminated** (finish execution).
+- *Main difference*: worker threads are not terminated while daemon threads are interrupted by the JVM.
+
+```java
+// Setting a thread as a Daemon Thread
+t1.setDaemon(true);
+```
