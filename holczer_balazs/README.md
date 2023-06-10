@@ -147,12 +147,12 @@ public class Main {
 ## Use `Runnable` interface or `Thread` classes?
 
 - Usually using the `Runnable` interface approach is preferred.
-    - If we extends `Thread` then we can't extend any other class (usually a huge disadvantage) because in Java, a given class can extends one class exclusively.
-    - A class may implement more interfaces as well - so implementing the `Runnable` interface can do no harm in the software logic.
+  - If we extends `Thread` then we can't extend any other class (usually a huge disadvantage) because in Java, a given class can extends one class exclusively.
+  - A class may implement more interfaces as well - so implementing the `Runnable` interface can do no harm in the software logic.
 
 ## `sleep()`
 
-- `Thread.sleep()` pauses the execution of the current thread for a specified duration (in *milliseconds*).
+- `Thread.sleep()` pauses the execution of the current thread for a specified duration (in _milliseconds_).
 - Introduces delays or pauses in the program's execution.
 - `Thread.sleep()` method can be used for controlling the timing of certain operations or introducing delays between actions.
 - Throws an `InterruptedException` if the thread is interrupted by another thread.
@@ -162,8 +162,8 @@ public class Main {
 - `Thread.join()` allows one thread to wait for the completion of another thread.
 - When a thread invokes the `join()` method on another thread, it waits for that thread to finish its execution before continuing its own execution.
 - In the example below:
-    - By calling `t1.join()`, the main thread waits for `t1` to finish execution before continuing. Same for `t2`.
-    - The `join()` calls ensure that the output from the main thread ("Finished with Threads...") is only printed once both `t1` and `t2` have finished their tasks.
+  - By calling `t1.join()`, the main thread waits for `t1` to finish execution before continuing. Same for `t2`.
+  - The `join()` calls ensure that the output from the main thread ("Finished with Threads...") is only printed once both `t1` and `t2` have finished their tasks.
 
 ```java
 t1.start();
@@ -188,14 +188,14 @@ System.out.println("Finished with Threads...");
 
 <img src="./pics/daemon_vs_worker_threads.png" width="40%" />
 
-- Daemon threads are *low priority* threads that run in the background to perform tasks such as garbage collection.
+- Daemon threads are _low priority_ threads that run in the background to perform tasks such as garbage collection.
 - Usually we create daemon threads for I/O operations or services (smartphone services such as NFC or Bluetooth communication).
-    - Can create a daemon thread for a smartphone application to look for smart-watches to pair with.
+  - Can create a daemon thread for a smartphone application to look for smart-watches to pair with.
 - Daemon threads are **terminated by the JVM when all other worker threads are terminated** (finish execution).
-    - They do not prevent the JVM from exiting when all non-daemon threads have finished executing.
-    - When all worker threads have completed their execution, the JVM terminates any remaining daemon threads without allowing them to finish their work.
-    - Recommended to use daemon threads for tasks that are safe to be terminated abruptly and do not require precise completion.
-- *Main difference*: worker threads are not terminated while daemon threads are interrupted by the JVM.
+  - They do not prevent the JVM from exiting when all non-daemon threads have finished executing.
+  - When all worker threads have completed their execution, the JVM terminates any remaining daemon threads without allowing them to finish their work.
+  - Recommended to use daemon threads for tasks that are safe to be terminated abruptly and do not require precise completion.
+- _Main difference_: worker threads are not terminated while daemon threads are interrupted by the JVM.
 
 ```java
 // Setting a thread as a Daemon Thread
@@ -208,12 +208,12 @@ t1.setDaemon(true);
 
 - Time-slicing algorithm is handled by Thread Scheduler.
 - Can assign a priority value (1-10) to every Thread
-    - default priority value is 5
-    - `MIN_PRIORITY`: 1
-    - `MAX_PRIORITY`: 10
-- Threads with the *same priority* value (default priority is 5) are executed in a **FIFS** (first-in-first-served) manner - the thread scheduler store the threads in a **queue**.
+  - default priority value is 5
+  - `MIN_PRIORITY`: 1
+  - `MAX_PRIORITY`: 10
+- Threads with the _same priority_ value (default priority is 5) are executed in a **FIFS** (first-in-first-served) manner - the thread scheduler store the threads in a **queue**.
 - Higher priority threads are executed before lower priority threads but it depends on the underlying OS (thread starvation is avoided).
-    - E.g., main thread with default priority of 5 could be executed before threads with priority of 10.
+  - E.g., main thread with default priority of 5 could be executed before threads with priority of 10.
 
 ```java
 // Thread with priority 10
@@ -237,4 +237,37 @@ t.start();
 
 - Every thread has its own stack memory but all threads share the heap memory (shared memory space). Thus, synchronization is needed.
 - The main purpose of **synchronization** is the sharing of resources without interference using mutual exclusion.
-    - So that threads cannot interfere the sharing of resources in Heap Memory.
+  - So that threads cannot interfere the sharing of resources in Heap Memory.
+
+## increment counter example
+
+- Located in `~/_004_thread_memory_synchronization`
+
+```java
+public void increment() {
+    counter++;
+}
+```
+
+- In the example below,
+  - Reading the number from memory
+  - Incrementing the value
+  - Writing the number to memory
+  - Return with the variable
+- These operations seems to be atomic in the sense that requires only a single operation but this is not the case.
+  - It takes some time to finish with the _increment operation_.
+  - During this procedure, another thread may call this method as well with the original counter value.
+  - If both threads call this method at the same time, they share the same variable `counter` memory.
+    - counter = 0
+    - Thread 1: counter = counter + 1 = 1
+    - Thread 2: counter = counter + 1 = 1
+    - Final value counter = 1
+
+```java
+public static synchronized void increment() {
+    counter++;
+}
+```
+
+- Using the `synchronized` keyword helps to ensure that this method is only executed by a single thread at a given time.
+- In technical terms, it helps to achieve thread safety and prevent race conditions.
