@@ -366,3 +366,53 @@ lock.unlock();
     - Consider recursive method calls.
     - If a given thread calls a recursive and synchronized method several times, then it is fine (note that in this case the same thread "enters" the synchronized block several times).
     - There will be no deadlock because of re-entrant synchronization.
+
+## Thread Communication (`wait` and `notify`)
+
+- Threads that are locking on the same intrinsic lock (monitor) can release the lock until the other thread calls `notify`.
+- `wait()` and `notify()` methods can be used and called from *synchronized* methods or blocks exclusively.
+
+<img src="./pics/wait_and_notify.png" width="80%" />
+
+- If there are 2 threads using the same intrinsic lock, the first thread goes into a waiting state with `wait()` but the second thread doesn't execute `notify()`, then thread 1 will be in the waiting state infinitely. This is called **deadlock**.
+
+```java
+class Process {
+
+    public void produce() throws InterruptedException {
+        synchronized (this) {
+            System.out.println("Running the produce method...");
+            wait(); 
+            System.out.println("Again in the producer method...");
+        }
+    }
+
+    public void consume() throws InterruptedException {
+        Thread.sleep(1000);
+
+        synchronized (this) {
+            System.out.println("Consume method is executed...");
+            notify(); 
+            Thread.sleep(5000);
+        }
+    }
+
+}
+```
+
+- In the example above, the behavior of `wait()` and `notify()` is such that when a thread calls `notify()`, it only signals to another waiting thread that it can wake up and attempt to reacquire the lock.
+- However, the actual reacquisition of the lock by the waiting thread is not immediate.
+- The waiting thread will only be able to proceed and acquire the lock when the notifying thread releases the lock by exiting the **synchronized** block.
+    1. `consume()` method prints "Consume method is executed..."
+    2. `consume()` method sleeps for 5 seconds (while still holding the lock as the synchronized block has not yet been exited).
+    3. After 5 seconds, the `consume()` method releases the lock by exiting the synchronized block.
+    4. `produce()` method acquires the lock and continues execution, printing "Again in the producer method...".
+
+## Difference between `wait()` and `sleep()`
+
+|`wait()`|`sleep()`|
+|---|---|
+|Call `wait` on the Object.|Call `sleep` on the Thread itself.|
+|`wait` can be the interrupted (need `InterruptedException`)|Sleep cannot be interrupted.|
+|`wait` must happen in a synchronized block.|Sleep does not have to be in a synchronized block.|
+|`sleep` does not release the locks it hold.|`wait` releases the lock on the object that `wait()` is called on.|
