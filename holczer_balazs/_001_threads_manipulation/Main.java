@@ -9,6 +9,15 @@ public class Main {
 
         t1.start();
         t2.start();
+
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Finished with Threads...");
     }
 
 }
@@ -21,7 +30,7 @@ class Runner1 extends Thread {
     public void run() {
         for (int i = 0; i < 10; i++) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

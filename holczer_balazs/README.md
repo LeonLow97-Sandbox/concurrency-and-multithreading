@@ -152,5 +152,29 @@ public class Main {
 
 ## `sleep()`
 
-- `Thread.sleep()`, provide no. of milliseconds in the argument.
-- Throws an InterruptedException.
+- `Thread.sleep()` pauses the execution of the current thread for a specified duration (in *milliseconds*).
+- Introduces delays or pauses in the program's execution.
+- `Thread.sleep()` method can be used for controlling the timing of certain operations or introducing delays between actions.
+- Throws an `InterruptedException` if the thread is interrupted by another thread.
+
+## `join()`
+
+- `Thread.join()` allows one thread to wait for the completion of another thread.
+- When a thread invokes the `join()` method on another thread, it waits for that thread to finish its execution before continuing its own execution.
+- In the example below:
+    - By calling `t1.join()`, the main thread waits for `t1` to finish execution before continuing. Same for `t2`.
+    - The `join()` calls ensure that the output from the main thread ("Finished with Threads...") is only printed once both `t1` and `t2` have finished their tasks.
+
+```java
+t1.start();
+t2.start();
+
+try {
+    t1.join(); // Main thread waits for thread1 to complete
+    t2.join(); // Main thread waits for thread2 to complete
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+System.out.println("Finished with Threads...");
+```
