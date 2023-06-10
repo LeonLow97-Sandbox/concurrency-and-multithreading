@@ -2,12 +2,26 @@ package holczer_balazs._004_thread_memory_synchronization;
 
 public class Main {
 
-    public static int counter = 0;
+    public static int counter1 = 0;
+    public static int counter2 = 0;
 
-    // Have to ensure that this method is executed only by a single thread at a given time
-    // use the keyword `synchronized`
-    public static synchronized void increment() {
-        counter++;
+    // because App object has a single lock: this is why the methods
+    // cannot be executed at the same time (time-slicing algorithm)
+    // usually it is not a good practice to use synchronized keyword
+    public static void increment1() {
+
+        // class level locking
+        // rule of thumb: we synchronize blocks that are 100% necessary
+        synchronized (Main.class) {
+            counter1++;
+        }
+
+    }
+
+    public static void increment2() {
+        synchronized (Main.class) {
+            counter2++;
+        }
     }
 
     public static void process() {
@@ -15,7 +29,7 @@ public class Main {
             @Override
             public void run() {
                 for (int i = 0; i < 100; ++i) {
-                    increment();
+                    increment1();
                 }
             }
         });
@@ -24,7 +38,7 @@ public class Main {
             @Override
             public void run() {
                 for (int i = 0; i < 100; ++i) {
-                    increment();
+                    increment2();
                 }
             }
         });
@@ -39,7 +53,8 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("The counter is " + counter);
+        System.out.println("The counter1 is " + counter1);
+        System.out.println("The counter2 is " + counter2);
     };
 
     public static void main(String[] args) {

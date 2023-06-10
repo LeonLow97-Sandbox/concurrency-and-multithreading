@@ -239,7 +239,7 @@ t.start();
 - The main purpose of **synchronization** is the sharing of resources without interference using mutual exclusion.
   - So that threads cannot interfere the sharing of resources in Heap Memory.
 
-## increment counter example
+## Synchronization
 
 - Located in `~/_004_thread_memory_synchronization`
 
@@ -269,5 +269,62 @@ public static synchronized void increment() {
 }
 ```
 
-- Using the `synchronized` keyword helps to ensure that this method is only executed by a single thread at a given time.
-- In technical terms, it helps to achieve thread safety and prevent race conditions.
+- Using the `synchronized` keyword helps to ensure that this method is only executed by a single thread at a given time, provides mutual exclusion
+- Provides **mutual exclusion**.
+- Ensures **thread safety** when multiple threads access shared data or critical sections of code concurrently.
+- If the methods are accessing different variables that are not shared among multiple threads, there is no risk of data inconsistency or race conditions, and synchronization is not required.
+- **Race Condition**: occurs when 2 or more threads access shared data concurrently, leading to unpredictable and incorrect behavior due to the uncontrolled interleaving of their operations.
+
+## Intrinsic Lock (Monitor Lock)
+
+```java
+public synchronized void increment() {
+    counter++;
+}
+```
+
+- Every object in Java has an intrinsic lock.
+- "A thread that needs exclusive and consistent access to an object's fields has to acquire the object's intrinsic lock before accessing them, and then release the intrinsic lock when it's done with them."
+- Due to the monitor lock, **no 2 threads can execute the same `synchronized` method at the same time**.
+- Only a single thread can acquire the intrinsic lock of the class.
+- When the `synchronized` keyword is used, the thread acquires the intrinsic lock of the application.
+- Removing the `synchronized` keyword allows the method to be called without acquiring the intrinsic lock. (faster)
+- When a method is declared as `synchronized`, it means that only 1 thread can execute that method at a time.
+    - A thread owns the intrinsic lock between the time is has acquired the lock and released the lock.
+    - If a thread owns an intrinsic lock, no other thread can acquire the same lock.
+- If multiple threads attempt to execute a `synchronized` method simultaneously, the additional threads will be blocked until the lock is released by the executing thread.
+- If multiple `synchronized` methods are present in an object, different threads may need to wait for each other to release the lock associated with that object before they can proceed. This can lead to potential performance issues and contention.
+
+### Object level locking (Intrinsic Lock)
+
+- This is called object level locking because we get the monitor lock (intrinsic lock) associated with the object itself.
+
+```java
+public synchronized void increment() {
+    counter++;
+}
+
+// block level lock
+public void increment() {
+    synchronized(this) {
+        counter++;
+    }
+}
+```
+
+### Class level locking (Intrinsic Lock)
+
+```java
+public static synchronized void increment() {
+    counter++;
+}
+
+public static void increment() {
+    synchronized(ClassName.class) {
+        counter++;
+    }
+}
+```
+
+- This is called class level locking because we get the monitor lock (intrinsic lock) associated with the class.
+- Block level locks are generally recommended as they do not configure other execution in the method to be synchronized. So, only synchronized specific executions in the method.
