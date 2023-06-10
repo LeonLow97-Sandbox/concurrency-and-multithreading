@@ -222,3 +222,19 @@ Thread t = new Thread(new WorkerThread());
 t.setPriority(Thread.MAX_PRIORITY);
 t.start();
 ```
+
+# Memory Management of Threads
+
+<img src="./pics/heap_and_stack_memory.png" width="40%" />
+
+- Threads (of the same process) run in a shared memory space, while processes run in separate memory spaces.
+
+| Stack Memory                                              | Heap Memory              |
+| --------------------------------------------------------- | ------------------------ |
+| Stores local variables, method arguments and method calls | Stores object references |
+| Fast                                                      | Slow                     |
+| Smaller memory                                            | Larger memory            |
+
+- Every thread has its own stack memory but all threads share the heap memory (shared memory space). Thus, synchronization is needed.
+- The main purpose of **synchronization** is the sharing of resources without interference using mutual exclusion.
+    - So that threads cannot interfere the sharing of resources in Heap Memory.
