@@ -349,3 +349,20 @@ public static void increment2() {
 ```
 
 - Both methods are using independent locks.
+
+## Reentrant Locks
+
+- Reentrant locks provide the ability for a thread to acquire the same lock multiple times without deadlocking itself, as long as it releases the lock the same number of times.
+
+```java
+private ReentrantLock lock = new ReentrantLock();
+lock.lock();
+lock.unlock();
+```
+
+- A thread cannot acquire a lock owned by another thread but a given thread can acquire a lock that it owns.
+- Allowing a thread to acquire the same lock more than once is called *re-entrant synchronization*.
+- Example:
+    - Consider recursive method calls.
+    - If a given thread calls a recursive and synchronized method several times, then it is fine (note that in this case the same thread "enters" the synchronized block several times).
+    - There will be no deadlock because of re-entrant synchronization.
