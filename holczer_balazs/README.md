@@ -144,6 +144,12 @@ public class Main {
     }
 ```
 
+## Use `Runnable` interface or `Thread` classes?
+
+- Usually using the `Runnable` interface approach is preferred.
+    - If we extends `Thread` then we can't extend any other class (usually a huge disadvantage) because in Java, a given class can extends one class exclusively.
+    - A class may implement more interfaces as well - so implementing the `Runnable` interface can do no harm in the software logic.
+
 ## `sleep()`
 
 - `Thread.sleep()`, provide no. of milliseconds in the argument.
