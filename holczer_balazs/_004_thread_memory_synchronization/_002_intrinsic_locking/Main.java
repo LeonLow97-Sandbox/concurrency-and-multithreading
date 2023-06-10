@@ -1,4 +1,4 @@
-package holczer_balazs._004_thread_memory_synchronization;
+package holczer_balazs._004_thread_memory_synchronization._002_intrinsic_locking;
 
 public class Main {
 
