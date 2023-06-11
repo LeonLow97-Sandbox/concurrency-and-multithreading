@@ -480,3 +480,17 @@ public void setTerminated(boolean terminated) {
     this.terminated = terminated;
 }
 ```
+
+## Deadlock
+
+- Deadlock occurs when 2 or more threads wait forever for a lock or resource held by another thread.
+- Deadlock is a state where 2 or more entities are stuck and unable to proceed because they are waiting for each other to release resources.
+
+---
+- Example of Deadlock in User Management Database table
+    - Process 1 wants to update User A's profile and needs to acquire a lock on User A's row.
+    - Process 2 wants to update User B's profile and needs to acquire a lock on User B's row.
+    - If Process 1 already holds a lock on User A's row and also wants to update User B's row, while Process 2 already holds a lock on User B's row and wants to update User A's row, a **circular dependency** is created.
+- Both processes are holding a lock on 1 row and are waiting for another row, resulting in a circular wait.
+- Leads to a deadlock where both processes are stuck and cannot proceed further.
+---
