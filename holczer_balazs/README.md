@@ -510,3 +510,11 @@ public void setTerminated(boolean terminated) {
     - Then, they both step back to allow the other person to pass, which results in another collision.
     - The cycle repeats indefinitely, and neither person can make forward progress.
 ---
+
+## How to handle deadlocks and livelocks?
+
+- Ensure that **each thread acquires the locks in the same order** to avoid any *cyclic dependency* in lock acquisition.
+- Ensure that a thread does not block infinitely if it is unable to acquire a lock.
+    - use `Lock` interface `tryLock()` method.
+- Livelock can be handled with the methods above and some randomness
+    - threads retry acquiring the locks at random intervals.
