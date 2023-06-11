@@ -25,6 +25,7 @@ class Worker implements Runnable {
     // the variable will be stored in the main memory
     // 1.) variables can be stored on the main memory without the volatile keyword
     // 2.) both of the threads may use the same cache (as they share the same CPU or CPU core)
+    // `volatile` guarantees pushing to RAM, but pushing to RAM can happen even without volatile.
     private volatile boolean terminated;
 
     @Override

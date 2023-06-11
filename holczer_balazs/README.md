@@ -454,6 +454,7 @@ lock.unlock();
 - Every read of a `volatile` variable will be read from the **RAM** so from the main memory (not from cache).
     - usually variables are cached for performance reasons
     - caches are faster. Do not use `volatile` keyword is not necessary (it prevents instruction reordering which is a performance boost technique).
+- `volatile` guarantees pushing to RAM, but pushing to RAM can happen even without volatile.
 
 ## When to use the `volatile` keyword?
 
@@ -465,3 +466,17 @@ lock.unlock();
     - If a variable represents the status of a shared resource and is updated by 1 thread, but read by multiple threads, marking it as `volatile` ensures that all threads see the most up-to-date status.
 3. Performance considerations:
     - In some situations, using `volatile` can offer better performance compared to other synchronization mechanisms, especially when the shared variable is frequently read but rarely written.
+
+## Stopping a Thread
+
+- Need to use `volatile` keyword to ensure that the termination status of a thread is shared in the main memory (RAM).
+
+```java
+// Create a volatile variable to terminate the thread
+private volatile boolean terminated;
+
+// Create a setter
+public void setTerminated(boolean terminated) {
+    this.terminated = terminated;
+}
+```
