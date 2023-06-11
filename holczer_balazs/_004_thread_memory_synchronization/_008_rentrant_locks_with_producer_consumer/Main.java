@@ -46,7 +46,7 @@ public class Main {
 }
 
 class LockWorker {
-    private Lock lock = new ReentrantLock();
+    private ReentrantLock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
 
     public void produce() throws InterruptedException {
@@ -67,7 +67,7 @@ class LockWorker {
 
         Thread.sleep(3000);
 
-        condition.signal(); // notify() - wakes up one waiting thread
+        condition.signal(); // notify() - wakes up the waiting thread
         lock.unlock(); // releases the given lock
     }
 }

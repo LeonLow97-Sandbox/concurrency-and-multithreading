@@ -432,3 +432,12 @@ lock.unlock();
     - Consider recursive method calls.
     - If a given thread calls a recursive and synchronized method several times, then it is fine (note that in this case the same thread "enters" the synchronized block several times).
     - There will be no deadlock because of re-entrant synchronization.
+
+## Locks and Synchronized Blocks
+
+|Lock (Reentrant)|Synchronized Blocks|
+|---|---|
+|Can make a lock fair (**prevent thread starvation**)|Unfair by default|
+|Can check whether the given lock is held or not with `lock.isHeldByCurrentThread()` with `Reentrant` interface|Cannot check the lock status directly|
+|Can get the **list of waiting threads** for the given lock|Cannot directly access the list of waiting threads|
+|Need `try-catch-finally` block|Don't need `try-catch-finally` block|
