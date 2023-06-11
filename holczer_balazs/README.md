@@ -290,8 +290,8 @@ public synchronized void increment() {
 - When the `synchronized` keyword is used, the thread acquires the intrinsic lock of the application.
 - Removing the `synchronized` keyword allows the method to be called without acquiring the intrinsic lock. (faster)
 - When a method is declared as `synchronized`, it means that only 1 thread can execute that method at a time.
-    - A thread owns the intrinsic lock between the time is has acquired the lock and released the lock.
-    - If a thread owns an intrinsic lock, no other thread can acquire the same lock.
+  - A thread owns the intrinsic lock between the time is has acquired the lock and released the lock.
+  - If a thread owns an intrinsic lock, no other thread can acquire the same lock.
 - If multiple threads attempt to execute a `synchronized` method simultaneously, the additional threads will be blocked until the lock is released by the executing thread.
 - If multiple `synchronized` methods are present in an object, different threads may need to wait for each other to release the lock associated with that object before they can proceed. This can lead to potential performance issues and contention.
 
@@ -353,7 +353,7 @@ public static void increment2() {
 ## Thread Communication (`wait` and `notify`)
 
 - Threads that are locking on the same intrinsic lock (monitor) can release the lock until the other thread calls `notify`.
-- `wait()` and `notify()` methods can be used and called from *synchronized* methods or blocks exclusively.
+- `wait()` and `notify()` methods can be used and called from _synchronized_ methods or blocks exclusively.
 
 <img src="./pics/wait_and_notify.png" width="80%" />
 
@@ -365,7 +365,7 @@ class Process {
     public void produce() throws InterruptedException {
         synchronized (this) {
             System.out.println("Running the produce method...");
-            wait(); 
+            wait();
             System.out.println("Again in the producer method...");
         }
     }
@@ -375,7 +375,7 @@ class Process {
 
         synchronized (this) {
             System.out.println("Consume method is executed...");
-            notify(); 
+            notify();
             Thread.sleep(5000);
         }
     }
@@ -386,25 +386,25 @@ class Process {
 - In the example above, the behavior of `wait()` and `notify()` is such that when a thread calls `notify()`, it only signals to another waiting thread that it can wake up and attempt to reacquire the lock.
 - However, the actual reacquisition of the lock by the waiting thread is not immediate.
 - The waiting thread will only be able to proceed and acquire the lock when the notifying thread releases the lock by exiting the **synchronized** block.
-    1. `consume()` method prints "Consume method is executed..."
-    2. `consume()` method sleeps for 5 seconds (while still holding the lock as the synchronized block has not yet been exited).
-    3. After 5 seconds, the `consume()` method releases the lock by exiting the synchronized block.
-    4. `produce()` method acquires the lock and continues execution, printing "Again in the producer method...".
+  1. `consume()` method prints "Consume method is executed..."
+  2. `consume()` method sleeps for 5 seconds (while still holding the lock as the synchronized block has not yet been exited).
+  3. After 5 seconds, the `consume()` method releases the lock by exiting the synchronized block.
+  4. `produce()` method acquires the lock and continues execution, printing "Again in the producer method...".
 
 ## Difference between `wait()` and `sleep()`
 
-|`wait()`|`sleep()`|
-|---|---|
-|Call `wait` on the Object.|Call `sleep` on the Thread itself.|
-|`wait` can be the interrupted (need `InterruptedException`)|Sleep cannot be interrupted.|
-|`wait` must happen in a synchronized block.|Sleep does not have to be in a synchronized block.|
-|`sleep` does not release the locks it hold.|`wait` releases the lock on the object that `wait()` is called on.|
+| `wait()`                                                    | `sleep()`                                                          |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| Call `wait` on the Object.                                  | Call `sleep` on the Thread itself.                                 |
+| `wait` can be the interrupted (need `InterruptedException`) | Sleep cannot be interrupted.                                       |
+| `wait` must happen in a synchronized block.                 | Sleep does not have to be in a synchronized block.                 |
+| `sleep` does not release the locks it hold.                 | `wait` releases the lock on the object that `wait()` is called on. |
 
 ## Releasing the Intrinsic Lock
 
 - 2 ways to release the intrinsic lock with `wait()` and `notify()`
-    - When a thread calls the `wait()` method, it releases the intrinsic lock (AKA monitor lock) that it holds, allowing other threads to acquire it.
-    - When a thread calls the `notify()` method, it does not directly release the lock to the waiting thread, the thread continues to execute until it releases the lock explicitly by **exiting the synchronized block/method**. 
+  - When a thread calls the `wait()` method, it releases the intrinsic lock (AKA monitor lock) that it holds, allowing other threads to acquire it.
+  - When a thread calls the `notify()` method, it does not directly release the lock to the waiting thread, the thread continues to execute until it releases the lock explicitly by **exiting the synchronized block/method**.
 - `notify()` is used to wake up one of the waiting threads that are waiting on the same monitor, allowing it to compete for the lock.
 - The thread that calls `notify()` does not directly release the lock held by the waiting thread, it releases the lock itself at a later point.
 
@@ -423,24 +423,24 @@ lock.unlock();
 ```
 
 - `new ReentrantLock(boolean fairness)`
-    - If the `fairness` parameter is set to be TRUE then the longest waiting thread will get the lock. (by default).
-    - If the `fairness` parameter is set to FALSE, then there is no access order.
+  - If the `fairness` parameter is set to be TRUE then the longest waiting thread will get the lock. (by default).
+  - If the `fairness` parameter is set to FALSE, then there is no access order.
 - **IMPORTANT**: a good approach is to use `try-catch-finally` blocks when doing the critical section and call `unlock()` in the finally block.
 - A thread cannot acquire a lock owned by another thread but a given thread can acquire a lock that it owns.
-- Allowing a thread to acquire the same lock more than once is called *re-entrant synchronization*.
+- Allowing a thread to acquire the same lock more than once is called _re-entrant synchronization_.
 - Example:
-    - Consider recursive method calls.
-    - If a given thread calls a recursive and synchronized method several times, then it is fine (note that in this case the same thread "enters" the synchronized block several times).
-    - There will be no deadlock because of re-entrant synchronization.
+  - Consider recursive method calls.
+  - If a given thread calls a recursive and synchronized method several times, then it is fine (note that in this case the same thread "enters" the synchronized block several times).
+  - There will be no deadlock because of re-entrant synchronization.
 
 ## Locks and Synchronized Blocks
 
-|Lock (Reentrant)|Synchronized Blocks|
-|---|---|
-|Can make a lock fair (**prevent thread starvation**)|Unfair by default|
-|Can check whether the given lock is held or not with `lock.isHeldByCurrentThread()` with `Reentrant` interface|Cannot check the lock status directly|
-|Can get the **list of waiting threads** for the given lock|Cannot directly access the list of waiting threads|
-|Need `try-catch-finally` block|Don't need `try-catch-finally` block|
+| Lock (Reentrant)                                                                                               | Synchronized Blocks                                |
+| -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Can make a lock fair (**prevent thread starvation**)                                                           | Unfair by default                                  |
+| Can check whether the given lock is held or not with `lock.isHeldByCurrentThread()` with `Reentrant` interface | Cannot check the lock status directly              |
+| Can get the **list of waiting threads** for the given lock                                                     | Cannot directly access the list of waiting threads |
+| Need `try-catch-finally` block                                                                                 | Don't need `try-catch-finally` block               |
 
 ## `volatile` Keyword
 
@@ -452,20 +452,20 @@ lock.unlock();
 <img src="./pics/memory_of_threads.png" width="60%" />
 
 - Every read of a `volatile` variable will be read from the **RAM** so from the main memory (not from cache).
-    - usually variables are cached for performance reasons
-    - caches are faster. Do not use `volatile` keyword is not necessary (it prevents instruction reordering which is a performance boost technique).
+  - usually variables are cached for performance reasons
+  - caches are faster. Do not use `volatile` keyword is not necessary (it prevents instruction reordering which is a performance boost technique).
 - `volatile` guarantees pushing to RAM, but pushing to RAM can happen even without volatile.
 
 ## When to use the `volatile` keyword?
 
 1. Flag variables:
-    - `volatile` is commonly used for boolean flags that control the execution of threads.
-    - For example, a flag to stop a thread's execution when set to `true`.
-    - Using `volatile` ensures that the flag's value is always visible to other threads.
-2. Status variables: 
-    - If a variable represents the status of a shared resource and is updated by 1 thread, but read by multiple threads, marking it as `volatile` ensures that all threads see the most up-to-date status.
+   - `volatile` is commonly used for boolean flags that control the execution of threads.
+   - For example, a flag to stop a thread's execution when set to `true`.
+   - Using `volatile` ensures that the flag's value is always visible to other threads.
+2. Status variables:
+   - If a variable represents the status of a shared resource and is updated by 1 thread, but read by multiple threads, marking it as `volatile` ensures that all threads see the most up-to-date status.
 3. Performance considerations:
-    - In some situations, using `volatile` can offer better performance compared to other synchronization mechanisms, especially when the shared variable is frequently read but rarely written.
+   - In some situations, using `volatile` can offer better performance compared to other synchronization mechanisms, especially when the shared variable is frequently read but rarely written.
 
 ## Stopping a Thread
 
@@ -487,12 +487,14 @@ public void setTerminated(boolean terminated) {
 - Deadlock is a state where 2 or more entities are stuck and unable to proceed because they are waiting for each other to release resources.
 
 ---
+
 - Example of Deadlock in User Management Database table
-    - Process 1 wants to update User A's profile and needs to acquire a lock on User A's row.
-    - Process 2 wants to update User B's profile and needs to acquire a lock on User B's row.
-    - If Process 1 already holds a lock on User A's row and also wants to update User B's row, while Process 2 already holds a lock on User B's row and wants to update User A's row, a **circular dependency** is created.
+  - Process 1 wants to update User A's profile and needs to acquire a lock on User A's row.
+  - Process 2 wants to update User B's profile and needs to acquire a lock on User B's row.
+  - If Process 1 already holds a lock on User A's row and also wants to update User B's row, while Process 2 already holds a lock on User B's row and wants to update User A's row, a **circular dependency** is created.
 - Both processes are holding a lock on 1 row and are waiting for another row, resulting in a circular wait.
 - Leads to a deadlock where both processes are stuck and cannot proceed further.
+
 ---
 
 ## Livelock
@@ -500,21 +502,83 @@ public void setTerminated(boolean terminated) {
 - Livelock occurs in concurrent systems, where 2 or more processes become stuck in a repetitive cycle of actions, unable to progress.
 - Similar to deadlock, but in a livelock, the processes are not blocked or waiting for resources; they are continuously active, yet unable to make progress towards their goals.
 - Often arise when multiple processes try to respond to a certain condition or event,but their actions end up interfering with each other, causing a perpetual loop.
-- Unlike deadlocks, livelocks do not result in a complete system half, but it leads to an *inefficient utilization of resources* and can severely *impact system performance*.
+- Unlike deadlocks, livelocks do not result in a complete system half, but it leads to an _inefficient utilization of resources_ and can severely _impact system performance_.
 - Resolving a livelock typically involves careful analysis and modification of the affected processes' logic to break the repetitive cycle and enable progress.
 
 ---
+
 - Practical Example to understand Livelock
-    - 2 people trying to pass each other in a narrow hallway.
-    - If both individuals move in the same direction at the same time to let the other person pass, hey end up blocking each other's path.
-    - Then, they both step back to allow the other person to pass, which results in another collision.
-    - The cycle repeats indefinitely, and neither person can make forward progress.
+  - 2 people trying to pass each other in a narrow hallway.
+  - If both individuals move in the same direction at the same time to let the other person pass, hey end up blocking each other's path.
+  - Then, they both step back to allow the other person to pass, which results in another collision.
+  - The cycle repeats indefinitely, and neither person can make forward progress.
+
 ---
 
 ## How to handle deadlocks and livelocks?
 
-- Ensure that **each thread acquires the locks in the same order** to avoid any *cyclic dependency* in lock acquisition.
+- Ensure that **each thread acquires the locks in the same order** to avoid any _cyclic dependency_ in lock acquisition.
 - Ensure that a thread does not block infinitely if it is unable to acquire a lock.
-    - use `Lock` interface `tryLock()` method.
+  - use `Lock` interface `tryLock()` method.
 - Livelock can be handled with the methods above and some randomness
-    - threads retry acquiring the locks at random intervals.
+  - threads retry acquiring the locks at random intervals.
+
+## Atomic Variables
+
+- Provide atomicity guarantees for certain operations.
+- Ensure that specific operations on the variable are executed atomically, meaning they are indivisible (cannot be interfered by other threads).
+- Ensures thread-safety and avoids race conditions.
+- Atomic variables should be used when you need to perform single, thread-safe operations on a single variable, such as incrementing, decrementing, or setting its value.
+- Useful in scenarios with high contention, where multiple threads may simultaneously read and write to the same variable.
+
+## When to use atomic variables over the `synchronized` keyword?
+
+1. Simplicity
+   - Atomic variables are simpler to use and understand, especially for simple operations on a single variable.
+2. Performance
+   - Atomic variables can offer better performance in high-contention scenarios compared to synchronized blocks as they have _lower overhead_.
+   - `synchronized` keyword introduces higher overhead due to acquiring and releasing locks, which can impact performance, especially in scenarios with low contention.
+3. Granularity
+   - Atomic variables allow fine-grained control over the synchronization of specific operations, while `synchronized` keyword applies to entire blocks or methods.
+
+## Classes for Atomic Variables
+
+- In Java, the `java.util.concurrent.atomic` package provides several classes for atomic variables.
+
+1. `AtomicInteger`: this class provides atomic operations for `int` values. Supports atomic increments, decrements, additions and comparisons.
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+AtomicInteger atomicInteger = new AtomicInteger(0);
+atomicInteger.incrementAndGet(); // Atomically increments the value by 1 and returns the new value
+atomicInteger.getAndAdd(5); // Atomically adds 5 to the value and returns the previous value
+```
+
+2. `AtomicLong`: Similar to `AtomicInteger`, this class provides atomic operations for `long` values.
+
+```java
+import java.util.concurrent.atomic.AtomicLong;
+
+AtomicLong atomicLong = new AtomicLong(0L);
+atomicLong.decrementAndGet(); // Atomically decrements the value by 1 and returns the new value
+atomicLong.compareAndSet(10L, 15L); // Atomically compares the value with 10L and sets it to 15L if they match
+```
+
+3. `AtomicBoolean`: This class provides atomic operations for `boolean` values.
+
+```java
+import java.util.concurrent.atomic.AtomicBoolean;
+
+AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+atomicBoolean.getAndSet(false); // Atomically sets the value to false and returns the previous value
+```
+
+4. `AtomicReference`: This class provides atomic operations for reference types.
+
+```java
+import java.util.concurrent.atomic.AtomicReference;
+
+AtomicReference<String> atomicReference = new AtomicReference<>("Hello");
+atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value with "Hello" and sets it to "Hi" if they match
+```
