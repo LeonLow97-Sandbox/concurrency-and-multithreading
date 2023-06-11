@@ -582,3 +582,48 @@ import java.util.concurrent.atomic.AtomicReference;
 AtomicReference<String> atomicReference = new AtomicReference<>("Hello");
 atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value with "Hello" and sets it to "Hi" if they match
 ```
+
+## Semaphores
+
+- **Simple variables** (or abstract data types) that are used for controlling access to a common resource. Important concept in operating systems.
+- "It is a record of how many units of a particular resource are available. We have to wait until a unit of the resource becomes available again".
+- Maintains a set of permits that threads must acquire before accessing the shared resource.
+- Semaphores can be used to limit the number of concurrent threads accessing the resource or to coordinate access in a specific order.
+- Uses the `Semaphore` class to provide semaphore functionality.
+- Semaphores have an internal counter representing the number of available permits.
+- Threads can acquire permits using the `acquire` method and release them using the `release` method.
+- **Counting Semaphores**: allows an arbitrary resource count.
+- **Binary Semaphores**: semaphores that are restricted to the values 0 and 1.
+
+---
+
+- Practical example of Semaphores
+  - Suppose a library has 10 identical study rooms (each room can be used by a single student at a time).
+  - Students must request a study room from the front desk.
+  - If no rooms are free, students have to wait for rooms to be available again so until someone relinquishes (leaves) a given study room.
+  - When a student finished using the room, the student must return to the front desk and indicate that 1 room has become free.
+  - the front desk is the Semaphore in this case.
+
+---
+
+- Semaphores track only **how many resources are free** - it does not keep track of which of the resources are free.
+- The semaphore count may serve as a useful **trigger** for a number of different actions (web servers).
+- **Producer-Consumer** problem can be solved and implemented with the help of semaphores (Dijkstra's approach).
+
+## Mutex (Mutual Exclusive Object)
+
+- Mutex is a synchronization mechanism used to protect shared resources from concurrent access by multiple threads.
+- It allows only 1 thread to acquire the mutex and access the shared resource at a time, ensuring exclusive access and preventing data races or conflicts.
+- The `ReentrantLock` class implements mutex functionality.
+- Mutexes provide more flexibility than Java's intrinsic locks (`synchronized` keyword) by allowing explicit control over lock acquisition and release.
+- Mutex is very similar to a binary semaphore: while binary semaphore can be used as mutex, a mutex is a more specific use-case.
+- `Lock` is designed to enforce a mutual exclusion concurrency control policy.
+
+## Semaphore vs Mutex
+
+|Semaphore|Mutex|
+|---|---|
+|**Signalling Mechanism**|**Locking Mechanism**|
+|Threads and processes perform `wait()` and `notify()` operations to indicate whether that are acquiring or releasing the resource.|Threads or processes have to acquire the lock on mutex object if it wants to acquire the resource.|
+|Allows multiple program threads to access the **finite instance of resources** (not just a single resource)|Allows multiple program threads to access a **single shared resource** but one at a time.|
+|the process of thread **blocks** itself if no resource is free till the count of semaphore become greater than 0|if the lock is already acquired by another thread or process then the thread will **wait** until the mutex object gets unlocked.|
