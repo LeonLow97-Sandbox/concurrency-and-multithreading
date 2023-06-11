@@ -350,23 +350,6 @@ public static void increment2() {
 
 - Both methods are using independent locks.
 
-## Reentrant Locks
-
-- Reentrant locks provide the ability for a thread to acquire the same lock multiple times without deadlocking itself, as long as it releases the lock the same number of times.
-
-```java
-private ReentrantLock lock = new ReentrantLock();
-lock.lock();
-lock.unlock();
-```
-
-- A thread cannot acquire a lock owned by another thread but a given thread can acquire a lock that it owns.
-- Allowing a thread to acquire the same lock more than once is called *re-entrant synchronization*.
-- Example:
-    - Consider recursive method calls.
-    - If a given thread calls a recursive and synchronized method several times, then it is fine (note that in this case the same thread "enters" the synchronized block several times).
-    - There will be no deadlock because of re-entrant synchronization.
-
 ## Thread Communication (`wait` and `notify`)
 
 - Threads that are locking on the same intrinsic lock (monitor) can release the lock until the other thread calls `notify`.
@@ -416,3 +399,36 @@ class Process {
 |`wait` can be the interrupted (need `InterruptedException`)|Sleep cannot be interrupted.|
 |`wait` must happen in a synchronized block.|Sleep does not have to be in a synchronized block.|
 |`sleep` does not release the locks it hold.|`wait` releases the lock on the object that `wait()` is called on.|
+
+## Releasing the Intrinsic Lock
+
+- 2 ways to release the intrinsic lock with `wait()` and `notify()`
+    - When a thread calls the `wait()` method, it releases the intrinsic lock (AKA monitor lock) that it holds, allowing other threads to acquire it.
+    - When a thread calls the `notify()` method, it does not directly release the lock to the waiting thread, the thread continues to execute until it releases the lock explicitly by **exiting the synchronized block/method**. 
+- `notify()` is used to wake up one of the waiting threads that are waiting on the same monitor, allowing it to compete for the lock.
+- The thread that calls `notify()` does not directly release the lock held by the waiting thread, it releases the lock itself at a later point.
+
+<img src="./pics/sequence_of_events_for_wait_and_notify.png" width="60%" />
+
+## Reentrant Locks
+
+- Reentrant locks provide the ability for a thread to acquire the same lock multiple times without deadlocking itself, as long as it releases the lock the same number of times.
+- It has the same behavior as the "synchronized approach" with some additional features.
+
+```java
+private Lock lock = new ReentrantLock(); // works too as Lock is an interface and ReentrantLock implements Lock
+private ReentrantLock lock = new ReentrantLock();
+lock.lock();
+lock.unlock();
+```
+
+- `new ReentrantLock(boolean fairness)`
+    - If the `fairness` parameter is set to be TRUE then the longest waiting thread will get the lock. (by default).
+    - If the `fairness` parameter is set to FALSE, then there is no access order.
+- **IMPORTANT**: a good approach is to use `try-catch-finally` blocks when doing the critical section and call `unlock()` in the finally block.
+- A thread cannot acquire a lock owned by another thread but a given thread can acquire a lock that it owns.
+- Allowing a thread to acquire the same lock more than once is called *re-entrant synchronization*.
+- Example:
+    - Consider recursive method calls.
+    - If a given thread calls a recursive and synchronized method several times, then it is fine (note that in this case the same thread "enters" the synchronized block several times).
+    - There will be no deadlock because of re-entrant synchronization.

@@ -1,37 +1,59 @@
 package holczer_balazs._004_thread_memory_synchronization._004_reentrant_locks;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
-    
+
+    private static int counter = 0;
+    private static Lock lock = new ReentrantLock();
+
+    private static void increment() {
+
+        lock.lock(); // given thread acquires the lock
+
+        try {
+            for (int i = 0; i < 10000; i++) {
+                counter++;
+            }
+        } finally {
+            lock.unlock(); // given thread releases the lock
+            // unlock();
+        }
+
+    }
+
+    // public static void unlock() {
+    //     lock.unlock();
+    // }
+
     public static void main(String[] args) {
-        Counter counter = new Counter();
-        counter.increment();
-        int count = counter.getCount();
-        System.out.println("Counter: " + count);
-    }
 
-}
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                increment();
+            }
+        });
 
-class Counter {
-    private int count = 0;
-    private ReentrantLock lock = new ReentrantLock();
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                increment();
+            }
+        });
 
-    public void increment() {
-        lock.lock(); // acquire the lock
+        t1.start();
+        t2.start();
+
         try {
-            count++;
-        } finally {
-            lock.unlock(); // release the lock
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-    }
 
-    public int getCount() {
-        lock.lock(); // acquire the lock
-        try {
-            return count;
-        } finally {
-            lock.unlock(); // release the lock
-        }
+        System.out.println("Counter: " + counter);
+
     }
 }
