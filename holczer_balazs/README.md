@@ -441,3 +441,27 @@ lock.unlock();
 |Can check whether the given lock is held or not with `lock.isHeldByCurrentThread()` with `Reentrant` interface|Cannot check the lock status directly|
 |Can get the **list of waiting threads** for the given lock|Cannot directly access the list of waiting threads|
 |Need `try-catch-finally` block|Don't need `try-catch-finally` block|
+
+## `volatile` Keyword
+
+- `volatile` keyword in Java is used to indicate that a variable may be modified by multiple threads and it provides a lightweight synchronization mechanism for variables that are shared among threads.
+- Used in scenarios where you have a variable that is accessed by multiple threads, and you want to ensure that changes made by 1 thread are immediately visible to other threads.
+- Ensure that any read or write operation on the variable is directly performed on the main memory, rather than on a local cache specific to each thread.
+- Guarantees visibility of changes made by 1 thread to other threads, helping to avoid certain subtle concurrency issues.
+
+<img src="./pics/memory_of_threads.png" width="60%" />
+
+- Every read of a `volatile` variable will be read from the **RAM** so from the main memory (not from cache).
+    - usually variables are cached for performance reasons
+    - caches are faster. Do not use `volatile` keyword is not necessary (it prevents instruction reordering which is a performance boost technique).
+
+## When to use the `volatile` keyword?
+
+1. Flag variables:
+    - `volatile` is commonly used for boolean flags that control the execution of threads.
+    - For example, a flag to stop a thread's execution when set to `true`.
+    - Using `volatile` ensures that the flag's value is always visible to other threads.
+2. Status variables: 
+    - If a variable represents the status of a shared resource and is updated by 1 thread, but read by multiple threads, marking it as `volatile` ensures that all threads see the most up-to-date status.
+3. Performance considerations:
+    - In some situations, using `volatile` can offer better performance compared to other synchronization mechanisms, especially when the shared variable is frequently read but rarely written.
