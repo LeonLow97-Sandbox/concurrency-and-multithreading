@@ -18,3 +18,9 @@
 - Performing read-modify-write operations that are not atomic, such as retrieving s value, modifying it, and storing it back.
 - Non-atomic operations can lead to race conditions, inconsistent states, and data corruption in a multithreaded environment.
 - To ensure atomicity for non-atomic operations, synchronization mechanisms like locks or atomic classes should be used to protect the critical sections of code.
+
+## Contention
+
+- Contention refers to a situation where multiple threads compete for shared resources, such as variables, objects or sections of code, leading to potential conflicts and synchronization issues.
+- High contention arises when multiple threads attempt to simultaneously read from or write to the same resource, potentially leading to race conditions and inconsistent results.
+- For example, if multiple threads are performing frequent increments or updates on a shared counter variable, there is a high likelihood of contention.
