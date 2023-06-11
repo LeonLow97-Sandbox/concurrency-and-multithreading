@@ -494,3 +494,19 @@ public void setTerminated(boolean terminated) {
 - Both processes are holding a lock on 1 row and are waiting for another row, resulting in a circular wait.
 - Leads to a deadlock where both processes are stuck and cannot proceed further.
 ---
+
+## Livelock
+
+- Livelock occurs in concurrent systems, where 2 or more processes become stuck in a repetitive cycle of actions, unable to progress.
+- Similar to deadlock, but in a livelock, the processes are not blocked or waiting for resources; they are continuously active, yet unable to make progress towards their goals.
+- Often arise when multiple processes try to respond to a certain condition or event,but their actions end up interfering with each other, causing a perpetual loop.
+- Unlike deadlocks, livelocks do not result in a complete system half, but it leads to an *inefficient utilization of resources* and can severely *impact system performance*.
+- Resolving a livelock typically involves careful analysis and modification of the affected processes' logic to break the repetitive cycle and enable progress.
+
+---
+- Practical Example to understand Livelock
+    - 2 people trying to pass each other in a narrow hallway.
+    - If both individuals move in the same direction at the same time to let the other person pass, hey end up blocking each other's path.
+    - Then, they both step back to allow the other person to pass, which results in another collision.
+    - The cycle repeats indefinitely, and neither person can make forward progress.
+---
