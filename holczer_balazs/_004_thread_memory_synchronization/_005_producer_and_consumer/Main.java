@@ -1,4 +1,4 @@
-package holczer_balazs._004_thread_memory_synchronization._006_producer_and_consumer;
+package holczer_balazs._004_thread_memory_synchronization._005_producer_and_consumer;
 
 import java.util.ArrayList;
 import java.util.List;

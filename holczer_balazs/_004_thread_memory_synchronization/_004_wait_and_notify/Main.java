@@ -1,4 +1,4 @@
-package holczer_balazs._004_thread_memory_synchronization._005_wait_and_notify;
+package holczer_balazs._004_thread_memory_synchronization._004_wait_and_notify;
 
 public class Main {
 

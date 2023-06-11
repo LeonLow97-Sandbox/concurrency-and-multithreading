@@ -1,4 +1,4 @@
-package holczer_balazs._004_thread_memory_synchronization._004_reentrant_locks;
+package holczer_balazs._004_thread_memory_synchronization._007_reentrant_locks;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
