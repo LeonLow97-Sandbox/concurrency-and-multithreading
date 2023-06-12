@@ -716,8 +716,16 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 ```
 
----
+## Latch
 
-### Latch
+- Synchronization mechanism that allows 1 or more threads to wait until a set of operations being performed by other threads completes.
+- The `CountDownLatch` class is initialized with a count, which represents the number of times the `countDown()` method must be invoked before the waiting threads are released.
+- Threads that need to wait for the latch to be released call the `await()` method on the latch. If the count is greater than 0, the calling thread will be blocked until the count reaches 0.
+- Once all the operations being performed by other threads are completed, the latch count is decrementing using the `countDown()` method. This allows waiting threads to proceed.
+- The `CountDownLatch` is a **one-time mechanism**. Once the count reaches 0, it cannot be reset.
+- Latches are commonly used to coordinate the execution of multiple threads, where 1 or more threads need to wait for others to complete before proceeding.
+- Latches are often used in scenarios like waiting for a specific number of tasks to complete in a parallel computation, waiting for resources to be initialized, or waiting for a group of threads to finish their work before continuing.
 
----
+## CyclicBarrier
+
+- 

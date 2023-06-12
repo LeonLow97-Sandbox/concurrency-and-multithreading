@@ -44,6 +44,7 @@ public class Latch {
         }
 
         try {
+            // main thread waits for the latch count to reach 0 before continuing execution
             latch.await(); // if the count is not 0, then the latch is going to wait
         } catch (InterruptedException e) {
             e.printStackTrace();
