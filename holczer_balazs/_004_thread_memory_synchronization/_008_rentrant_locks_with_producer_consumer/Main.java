@@ -1,7 +1,6 @@
 package holczer_balazs._004_thread_memory_synchronization._008_rentrant_locks_with_producer_consumer;
 
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
