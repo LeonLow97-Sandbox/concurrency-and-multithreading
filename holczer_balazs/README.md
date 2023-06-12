@@ -651,6 +651,7 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 2. `FixedThreadPool(n)`
     - This is how we can create a thread pool with `n` threads. Usually `n` is the number of cores in the CPU.
     - Maintains a fixed number of threads that are always available for executing tasks.
+    - If a thread finished executing a task, the thread pool will assign another task to that thread.
     - If there are more tasks than n, then these tasks are stored with a `LinkedBlockingQueue` data structure.
 3. `CachedThreadPool`
     - Dynamically create and reuse threads based on the demand for tasks.
