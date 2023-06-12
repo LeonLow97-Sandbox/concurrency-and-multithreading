@@ -677,20 +677,26 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 | Method       | `void run()`                           | `V call()`                                                      |
 | Return type  | None(void)                             | Can return a value of type V                                    |
 | Usage        | Used for fire-and-forget tasks         | Used when a result is needed                                    |
-| Supported By | `Thread` and `Executor`                | `ExecutorService` and `Future`                                  |
+| Supported By | `Executor` and `ExecutorService`       | `ExecutorService` and `ScheduledExecutorService`                |
 
 - `Runnable` is used when the execution has started but the calling thread doesn't need to wait for a result.
-- `Callable` is used when a result is needed, and it provides a way to retrieve the result of the *computation*.
+- `Callable` is used when a result is needed, and it provides a way to retrieve the result of the _computation_.
 - `Callable` interface is typically used with the `ExecutorService`, which represents a thread pool that can execute tasks asynchronously.
 - `Callable` tasks are useful when you need to perform a computation in a separate thread and retrieve the result asynchronously, allowing the calling thread to continue with other operations or wait for the result to be available.
 
-----
+---
+
 - `Callable` is a function interface with a single method `call()`, which returns a value of type `V` (the result of the computation).
 - When a `Callable` task is submitted to an `ExecutorService` using the `submit()` method, it returns a `Future` object that represents the result of the computation.
-    - `executorService.submit()` can handle `Runnable` interfaces as well as `Callable interfaces.
-    - `executorService.submit()` can handle a `Future<T>` return value and we can get the `T` value with `get()` on the future object.
+  - `executorService.submit()` can handle `Runnable` interfaces as well as `Callable interfaces.
+  - `executorService.submit()` can handle a `Future<T>` return value and we can get the `T` value with `get()` on the future object.
 - The `Future` object provides methods to check if the computation is complete, retrieve the result using the `get()` method (which blocks until the result is available), and cancel the task if needed.
-----
+
+---
+
+- To submit tasks that implement the `Runnable` interface, `executorService.execute()` is used.
+
+---
 
 # Collection Framework
 
@@ -703,9 +709,15 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 - Java provides the `Collections` class, which includes methods for synchronizing collections.
 - Without synchronization, concurrent access to a collection can result in data inconsistencies, race conditions, and other concurrency related issues.
 - Synchronizing a collection ensures that only 1 thread can modify the collection at a time, preventing concurrent modifications and maintaining data integrity.
-- Synchronized collections use an *internal lock* mechanism to ensure thread-safe access. This lock allows only 1 thread to perform operations on the collection at a time, while other threads wait for their turn.
+- Synchronized collections use an _internal lock_ mechanism to ensure thread-safe access. This lock allows only 1 thread to perform operations on the collection at a time, while other threads wait for their turn.
 
 ```java
 // For synchronizing ArrayList
 List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 ```
+
+---
+
+### Latch
+
+---

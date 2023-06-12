@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class _001_collections_synchronization {
+public class CollectionsSynchronization {
 
     public static void main(String[] args) {
 
