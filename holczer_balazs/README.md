@@ -691,3 +691,21 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
     - `executorService.submit()` can handle a `Future<T>` return value and we can get the `T` value with `get()` on the future object.
 - The `Future` object provides methods to check if the computation is complete, retrieve the result using the `get()` method (which blocks until the result is available), and cancel the task if needed.
 ----
+
+# Collection Framework
+
+<img src="./pics/java-collections-framework.png" width="50%" style="background-color:white;padding:10px;border:3px solid black" />
+
+- Might not be thread safe (not synchronized).
+
+## Collections Synchronization
+
+- Java provides the `Collections` class, which includes methods for synchronizing collections.
+- Without synchronization, concurrent access to a collection can result in data inconsistencies, race conditions, and other concurrency related issues.
+- Synchronizing a collection ensures that only 1 thread can modify the collection at a time, preventing concurrent modifications and maintaining data integrity.
+- Synchronized collections use an *internal lock* mechanism to ensure thread-safe access. This lock allows only 1 thread to perform operations on the collection at a time, while other threads wait for their turn.
+
+```java
+// For synchronizing ArrayList
+List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
+```
