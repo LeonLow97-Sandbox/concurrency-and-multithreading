@@ -621,12 +621,12 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 
 ## Semaphore vs Mutex
 
-|Semaphore|Mutex|
-|---|---|
-|**Signalling Mechanism**|**Locking Mechanism**|
-|Threads and processes perform `wait()` and `notify()` operations to indicate whether that are acquiring or releasing the resource.|Threads or processes have to acquire the lock on mutex object if it wants to acquire the resource.|
-|Allows multiple program threads to access the **finite instance of resources** (not just a single resource)|Allows multiple program threads to access a **single shared resource** but one at a time.|
-|the process of thread **blocks** itself if no resource is free till the count of semaphore become greater than 0|if the lock is already acquired by another thread or process then the thread will **wait** until the mutex object gets unlocked.|
+| Semaphore                                                                                                                          | Mutex                                                                                                                            |
+| ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Signalling Mechanism**                                                                                                           | **Locking Mechanism**                                                                                                            |
+| Threads and processes perform `wait()` and `notify()` operations to indicate whether that are acquiring or releasing the resource. | Threads or processes have to acquire the lock on mutex object if it wants to acquire the resource.                               |
+| Allows multiple program threads to access the **finite instance of resources** (not just a single resource)                        | Allows multiple program threads to access a **single shared resource** but one at a time.                                        |
+| the process of thread **blocks** itself if no resource is free till the count of semaphore become greater than 0                   | if the lock is already acquired by another thread or process then the thread will **wait** until the mutex object gets unlocked. |
 
 # Creating Threads with Executors
 
@@ -636,29 +636,58 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 - They abstract away the low-level details of thread creation, management and scheduling.
 - Executors **manage a pool of worker threads** that can be **reused** for executing tasks. Using thread pool makes multithreading **efficient**.
 - They improve performance and resource management by reusing threads instead of creating new threads for every task.
-    - Creating a thread is expensive because Java needs to allocate stack memory, cache, CPU associated with every single thread.
+  - Creating a thread is expensive because Java needs to allocate stack memory, cache, CPU associated with every single thread.
+
 ---
+
 - Why use thread pools and the Executor Framework?
-    - Java provides its own multithreading framework: `Executor Framework`.
-    - It will handle everything: schedule and execute the submitted tasks.
-    - Adding a new thread for each process leads to the creation of a large number of threads.
-        - These threads need memory + CPU will spend too much time switching context when the threads are swapped.
-    - Thread pools can reuse threads in an efficient manner by keeping the threads alive and reusing them (thread pools are usually **queues**).
+  - Java provides its own multithreading framework: `Executor Framework`.
+  - It will handle everything: schedule and execute the submitted tasks.
+  - Adding a new thread for each process leads to the creation of a large number of threads.
+    - These threads need memory + CPU will spend too much time switching context when the threads are swapped.
+  - Thread pools can reuse threads in an efficient manner by keeping the threads alive and reusing them (thread pools are usually **queues**).
+
 ---
+
 #### Types of Executors:
+
 1. `SingleThreadExecutor`
-    - This executor has a single thread so we can execute processes in a sequential manner. Every process is executed by a new thread.
+   - This executor has a single thread so we can execute processes in a sequential manner. Every process is executed by a new thread.
 2. `FixedThreadPool(n)`
-    - This is how we can create a thread pool with `n` threads. Usually `n` is the number of cores in the CPU.
-    - Maintains a fixed number of threads that are always available for executing tasks.
-    - If a thread finished executing a task, the thread pool will assign another task to that thread.
-    - If there are more tasks than n, then these tasks are stored with a `LinkedBlockingQueue` data structure.
+   - This is how we can create a thread pool with `n` threads. Usually `n` is the number of cores in the CPU.
+   - Maintains a fixed number of threads that are always available for executing tasks.
+   - If a thread finished executing a task, the thread pool will assign another task to that thread.
+   - If there are more tasks than n, then these tasks are stored with a `LinkedBlockingQueue` data structure.
 3. `CachedThreadPool`
-    - Dynamically create and reuse threads based on the demand for tasks.
-    - The number of threads is not bounded.
-    - If all threads are busy executing some tasks and a new task comes, the pool will create and add a new thread to the executor.
-    - If a thread remains idle for **60 seconds**, the thread is removed.
-    - It is used for short parallel tasks.
+   - Dynamically create and reuse threads based on the demand for tasks.
+   - The number of threads is not bounded.
+   - If all threads are busy executing some tasks and a new task comes, the pool will create and add a new thread to the executor.
+   - If a thread remains idle for **60 seconds**, the thread is removed.
+   - It is used for short parallel tasks.
 4. `ScheduledExecutor`
-    - Used for scheduling tasks to run at a specific time or with a fixed delay between executors.
+   - Used for scheduling tasks to run at a specific time or with a fixed delay between executors.
+
 ---
+
+## `Runnable` and `Callable` Interfaces
+
+|              | `Runnable`                             | `Callable`                                                      |
+| ------------ | -------------------------------------- | --------------------------------------------------------------- |
+| Purpose      | Represents a task that can be executed | Represents a task that can be executed and **returns a result** |
+| Method       | `void run()`                           | `V call()`                                                      |
+| Return type  | None(void)                             | Can return a value of type V                                    |
+| Usage        | Used for fire-and-forget tasks         | Used when a result is needed                                    |
+| Supported By | `Thread` and `Executor`                | `ExecutorService` and `Future`                                  |
+
+- `Runnable` is used when the execution has started but the calling thread doesn't need to wait for a result.
+- `Callable` is used when a result is needed, and it provides a way to retrieve the result of the *computation*.
+- `Callable` interface is typically used with the `ExecutorService`, which represents a thread pool that can execute tasks asynchronously.
+- `Callable` tasks are useful when you need to perform a computation in a separate thread and retrieve the result asynchronously, allowing the calling thread to continue with other operations or wait for the result to be available.
+
+----
+- `Callable` is a function interface with a single method `call()`, which returns a value of type `V` (the result of the computation).
+- When a `Callable` task is submitted to an `ExecutorService` using the `submit()` method, it returns a `Future` object that represents the result of the computation.
+    - `executorService.submit()` can handle `Runnable` interfaces as well as `Callable interfaces.
+    - `executorService.submit()` can handle a `Future<T>` return value and we can get the `T` value with `get()` on the future object.
+- The `Future` object provides methods to check if the computation is complete, retrieve the result using the `get()` method (which blocks until the result is available), and cancel the task if needed.
+----
