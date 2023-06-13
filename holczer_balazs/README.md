@@ -744,3 +744,13 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 - If a thread tries to add an element to a full queue, it will be blocked until space becomes available.
 - Commonly used in concurrent programming scenarios (Producer-Consumer) where multiple threads need to coordinate and exchange data efficiently, ensuring that the producer and consumer threads are synchronized.
 
+## `DelayQueue`
+
+- `DelayQueue` is a class that implements the `BlockingQueue` interface and provides a special priority queue for elements that have a delay associated with them.
+- Allows the elements to have a specific delay before they can be taken from the queue.
+- `DelayQueue` orders elements based on their delay time, so the element with the shortest delay will be the first one to be available for retrieval.
+- Elements can only be taken from the queue when their delay has expired. If an element's delay has not expired, the `take()` method will block until the delay is over.
+- `Delayed` interface requires implementing 2 methods:
+  - `getDelay(TimeUnit unit)`: specifies the remaining time for an element's delay to expire.
+  - `compareTo(Delayed o)`: order elements in the queue.
+- Useful in scenarios where you need to schedule tasks or events to occur after a specific delay, such as delayed execution of tasks or managing timed events.
