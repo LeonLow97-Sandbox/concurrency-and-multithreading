@@ -728,4 +728,11 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 
 ## CyclicBarrier
 
-- 
+- Synchronization mechanism that allows a group of threads to wait at a predetermined point until all threads in the group have reached that point.
+- The `CyclicBarrier` class is initialized with a count, which represents the number of threads that must reach the barrier before they are released.
+- Threads that need to synchronize with the barrier call the `await()` method on the `CyclicBarrier`. Each thread that calls `await()` indicates that it has reached the barrier.
+- Once the specified number of threads have called `await()`, the barrier is tripped, and all the waiting threads are released simultaneously.
+- `CyclicBarrier` can be reused after all threads have been released. Once the barrier is tripped, the count is reset, and threads can use it again for synchronization.
+- `CyclicBarrier` can also be initialized with a barrier action, which is a runnable task that is executed once the barrier is tripped. This can be useful for performing additional actions after all threads have reached the barrier.
+- `CyclicBarrier` is often used in scenarios where **multiple threads need to wait for each other** to reach a common point before proceeding, such as dividing a complex computation into smaller tasks that can be executed in parallel and synchronized at certain stages.
+
