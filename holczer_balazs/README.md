@@ -736,3 +736,11 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 - `CyclicBarrier` can also be initialized with a barrier action, which is a runnable task that is executed once the barrier is tripped. This can be useful for performing additional actions after all threads have reached the barrier.
 - `CyclicBarrier` is often used in scenarios where **multiple threads need to wait for each other** to reach a common point before proceeding, such as dividing a complex computation into smaller tasks that can be executed in parallel and synchronized at certain stages.
 
+## `BlockingQueue`
+
+- `BlockingQueue` is a data structure that provides thread-safe operations for adding and removing elements.
+- It supports blocking operations, meaning threads can be blocked when attempting to add or remove elements from the queue.
+- If a thread tries to remove an element from an empty queue, it will be blocked until an element becomes available.
+- If a thread tries to add an element to a full queue, it will be blocked until space becomes available.
+- Commonly used in concurrent programming scenarios (Producer-Consumer) where multiple threads need to coordinate and exchange data efficiently, ensuring that the producer and consumer threads are synchronized.
+
