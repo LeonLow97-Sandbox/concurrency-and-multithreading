@@ -754,3 +754,12 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - `getDelay(TimeUnit unit)`: specifies the remaining time for an element's delay to expire.
   - `compareTo(Delayed o)`: order elements in the queue.
 - Useful in scenarios where you need to schedule tasks or events to occur after a specific delay, such as delayed execution of tasks or managing timed events.
+
+## `PriorityQueue`
+
+- `PriorityBlockingQueue` is a class that implements the `BlockingQueue` interface and represents a thread-safe, priority-based queue.
+- Used in multithreading where elements are inserted into the queue by different threads and the order of retrieval is based on the priority of the elements.
+- Elements in a `PriorityBlockingQueue` are ordered based on their natural ordering or a custom comparator provided at the time of creation.
+- When a thread tries to remove an element from the queue, it gets the element with the highest priority (the minimum element according to the natural order or comparator).
+- If multiple elements have the **same priority**, their order or retrieval is not guaranteed.
+- If the queue is empty, the retrieval operation blocks the calling thread until an element becomes available.
