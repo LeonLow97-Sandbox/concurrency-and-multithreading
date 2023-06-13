@@ -763,3 +763,16 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 - When a thread tries to remove an element from the queue, it gets the element with the highest priority (the minimum element according to the natural order or comparator).
 - If multiple elements have the **same priority**, their order or retrieval is not guaranteed.
 - If the queue is empty, the retrieval operation blocks the calling thread until an element becomes available.
+
+## `HashMap` as a Synchronized Collections
+
+- `Map<String, Integer> map = Collections.synchronizedMap(new HashMap<>());`
+  - NOT AN EFFICIENT SOLUTION!
+  - Can make a `Map` synchronized with the help of the `Collections` class.
+  - Uses the **intrinsic lock** which means that independent operations may have to wait for each other.
+    - not efficient because it uses a single thread (intrinsic lock) can manipulate the underlying data structure.
+- `ConcurrentHashMap`
+  - Can make a map synchronized with defining **segments** of the underlying array.
+  - these segments (16 items) can be updated only by a **single thread**.
+  - Assign a lock to every segment instead of using a single lock.
+  - **Every thread can read** any item from the underlying array without restrictions.
