@@ -797,3 +797,14 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - If both threads call the `exchange()` method simultaneously, they will swap their objects and continue execution.
 
 ---
+
+## `CopyOnWriteArrayList` (Concurrent Collections)
+
+- `List<T> list = new CopyOnWriteArrayList<>();`: efficient implementation of the synchronized `ArrayList`.
+- `CopyOnWriteArrayList` is a class that provides thread-safe access to a list of elements. It implements the `List` interface.
+- Main feature of `CopyOnWriteArrayList` is that it **creates a new copy of the underlying array** every time a modification operation is performed, ensuring thread safety without the need for explicit synchronization.
+- Designed for scenarios where the number of read operations significantly outweighs the number of write operations.
+- Read operations on `CopyOnWriteArrayList` are fast and efficient because they do not require locking or copying of the array.
+- Write operations such as adding, modifying or removing elements, are relatively expensive as they involve creating a new copy of the array, O(N) operation.
+  - Write operations are **atomic**, threads must wait for each other to update the list.
+- `CopyOnWriteArrayList` trades off memory consumption and write operation cost for efficient concurrent read access. It is important to choose the appropriate data structure based on the specific requirements of your application.
