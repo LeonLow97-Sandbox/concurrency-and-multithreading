@@ -808,3 +808,4 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 - Write operations such as adding, modifying or removing elements, are relatively expensive as they involve creating a new copy of the array, O(N) operation.
   - Write operations are **atomic**, threads must wait for each other to update the list.
 - `CopyOnWriteArrayList` trades off memory consumption and write operation cost for efficient concurrent read access. It is important to choose the appropriate data structure based on the specific requirements of your application.
+
