@@ -776,3 +776,24 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - these segments (16 items) can be updated only by a **single thread**.
   - Assign a lock to every segment instead of using a single lock.
   - **Every thread can read** any item from the underlying array without restrictions.
+
+## `Exchanger`
+
+<img src="./pics/exchanger.png" width="50%" />
+
+- `Exchanger` is a synchronization construct that allows **2 threads to exchange objects**.
+- Provides a point of rendezvous where 2 threads can swap objects.
+- Operates based on the principle of thread synchronization, ensuring that the exchange happens only when both threads have reached the exchange point.
+
+---
+
+- Main features and usage patterns of the `Exchanger` class:
+  - `Exchanger` class is a **generic** class that takes a type parameter specifying the type of objects to be exchanged. E.g., `Exchanger<Integer>`
+  - `Exchanger` class provides 2 methods: `exchange()` and `exchange(V value)`.
+  - The `exchange()` method is a *blocking* operation that waits for another thread to arrive at the exchange point before proceeding with the exchange. It returns the object received from the other thread.
+  - The `exchange(V value)` method allows a thread to exchange its own object with the other thread. It waits for the other thread to arrive at the exchange point, exchanges the objects, and returns the object received from the other thread.
+  - If 1 of threads arrives at the exchange point before the other, it will wait until the other thread arrives. This synchronization ensures that both threads perform the exchange together.
+  - If only 1 thread calls the `exchange()` method, it will be blocked until another thread arrives.
+  - If both threads call the `exchange()` method simultaneously, they will swap their objects and continue execution.
+
+---
