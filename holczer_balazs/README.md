@@ -850,3 +850,13 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - Have to ensure to split the work evenly among the processors.
   - Have to ensure that processors should not wait for each other to finish - every processor should do the same amount of work.
   - E.g., Finding all prime factors for numbers 0 - 1000. We would assume one processor finds prime factors from 0 - 500 and the other from 501 - 1000. But as the number gets higher, it takes a longer time to find the prime factors. So the processor running for 0 - 500 will be completed earlier.
+
+## Merge Sort Algorithm (Multithreading and Parallel Programming)
+
+- Merge sort has O(n log n) time complexity.
+- Requires O(N) space complexity.
+- Divide and conquer approach
+  1. Divide the array into 2 sub-arrays recursively.
+  2. Sort these sub-arrays recursively with merge sort again.
+  3. If there is only a single item left in the sub-array, consider it to be sorted by definition (or can use insertion sort on small arrays).
+  4. Merge the sub-arrays to get the final sorted array.
