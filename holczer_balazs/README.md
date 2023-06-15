@@ -13,7 +13,7 @@ public static void main(String[] args) {
 ```
 
 - The reason for **multithreading** is to separate multiple (time-consuming) tasks that might be subjected to **interference by the execution of other tasks**.
-- With multithreading, can achieve better resource utilization and improve performance in the main.
+- With multithreading, can achieve **better resource utilization and improve performance** in the main.
 - For example (stock market application), the **application downloads real-time data from the web** and constructs time-series models (ARMA or ARIMA) based on the data.
   - Solution: Use multithreading and a distinct thread for this time consuming operation and the application will not freeze.
 - Multithreading is the ability of the CPU to execute multiple processes or threads concurrently.
@@ -33,7 +33,7 @@ public static void main(String[] args) {
 - A thread is a **light-weight** process.
 - It is a unit of execution _within a given process_, so a single process may contain several threads.
 - Each **thread in a process shares the memory and resources**.
-- Creating new threads require _fewer resources_ that creating new processes, does not affect the parent process.
+- Creating new threads require _fewer resources_ than creating new processes, does not affect the parent process.
 - Concurrent Programming: ensure that different threads in the same process are using the same memory.
 - The optimal number of threads is the number of processors (or processor cores) of the computer because this can make the application run parallel instead of a multithreaded application.
 
@@ -88,21 +88,21 @@ public static void main(String[] args) {
 
 ## 3 Methods to Start Threads
 
-1. Implementing the `Runner` interface
+1. Implementing the `Runner` interface (**Recommended Method**)
 
 ```java
-class Runner2 implements Runnable {
+class Runner1 implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < 10; i++) {
-            System.out.println("Runner2: " + i);
+            System.out.println("Runner1: " + i);
         }
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Thread t2 = new Thread(new Runner2());
+        Thread t1 = new Thread(new Runner1());
         t1.start();
     }
 }
@@ -261,7 +261,7 @@ public void increment() {
     - counter = 0
     - Thread 1: counter = counter + 1 = 1
     - Thread 2: counter = counter + 1 = 1
-    - Final value counter = 1
+    - Final value counter = 1 _(incorrect, should be 2)_
 
 ```java
 public static synchronized void increment() {
@@ -312,13 +312,14 @@ public void increment() {
 }
 ```
 
-### Class level locking (Intrinsic Lock)
+### Class level locking (Intrinsic Lock) - `static` keyword
 
 ```java
 public static synchronized void increment() {
     counter++;
 }
 
+// block level lock
 public static void increment() {
     synchronized(ClassName.class) {
         counter++;
@@ -357,7 +358,7 @@ public static void increment2() {
 
 <img src="./pics/wait_and_notify.png" width="80%" />
 
-- If there are 2 threads using the same intrinsic lock, the first thread goes into a waiting state with `wait()` but the second thread doesn't execute `notify()`, then thread 1 will be in the waiting state infinitely. This is called **deadlock**.
+- **Deadlock**: If there are 2 threads using the same intrinsic lock, the first thread goes into a waiting state with `wait()` but the second thread doesn't execute `notify()`, then thread 1 will be in the waiting state infinitely.
 
 ```java
 class Process {
@@ -371,7 +372,7 @@ class Process {
     }
 
     public void consume() throws InterruptedException {
-        Thread.sleep(1000);
+        Thread.sleep(1000); // to ensure that the produce thread runs first
 
         synchronized (this) {
             System.out.println("Consume method is executed...");
@@ -393,19 +394,19 @@ class Process {
 
 ## Difference between `wait()` and `sleep()`
 
-| `wait()`                                                    | `sleep()`                                                          |
-| ----------------------------------------------------------- | ------------------------------------------------------------------ |
-| Call `wait` on the Object.                                  | Call `sleep` on the Thread itself.                                 |
-| `wait` can be the interrupted (need `InterruptedException`) | Sleep cannot be interrupted.                                       |
-| `wait` must happen in a synchronized block.                 | Sleep does not have to be in a synchronized block.                 |
-| `sleep` does not release the locks it hold.                 | `wait` releases the lock on the object that `wait()` is called on. |
+| `wait()`                                                           | `sleep()`                                          |
+| ------------------------------------------------------------------ | -------------------------------------------------- |
+| Call `wait` on the Object.                                         | Call `sleep` on the Thread itself.                 |
+| `wait` can be the interrupted (need `InterruptedException`)        | Sleep cannot be interrupted.                       |
+| `wait` must happen in a synchronized block.                        | Sleep does not have to be in a synchronized block. |
+| `wait` releases the lock on the object that `wait()` is called on. | `sleep` does not release the locks it hold.        |
 
 ## Releasing the Intrinsic Lock
 
 - 2 ways to release the intrinsic lock with `wait()` and `notify()`
   - When a thread calls the `wait()` method, it releases the intrinsic lock (AKA monitor lock) that it holds, allowing other threads to acquire it.
   - When a thread calls the `notify()` method, it does not directly release the lock to the waiting thread, the thread continues to execute until it releases the lock explicitly by **exiting the synchronized block/method**.
-- `notify()` is used to wake up one of the waiting threads that are waiting on the same monitor, allowing it to compete for the lock.
+- `notify()` is used to wake up one of the waiting threads that are waiting on the same monitor, allowing it to try to acquire the lock.
 - The thread that calls `notify()` does not directly release the lock held by the waiting thread, it releases the lock itself at a later point.
 
 <img src="./pics/sequence_of_events_for_wait_and_notify.png" width="60%" />
@@ -624,7 +625,7 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 | Semaphore                                                                                                                          | Mutex                                                                                                                            |
 | ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | **Signalling Mechanism**                                                                                                           | **Locking Mechanism**                                                                                                            |
-| Threads and processes perform `wait()` and `notify()` operations to indicate whether that are acquiring or releasing the resource. | Threads or processes have to acquire the lock on mutex object if it wants to acquire the resource.                               |
+| Threads and processes perform `acquire()` and `release()` operations to indicate whether that are acquiring or releasing the resource. | Threads or processes have to acquire the lock on mutex object if it wants to acquire the resource.                               |
 | Allows multiple program threads to access the **finite instance of resources** (not just a single resource)                        | Allows multiple program threads to access a **single shared resource** but one at a time.                                        |
 | the process of thread **blocks** itself if no resource is free till the count of semaphore become greater than 0                   | if the lock is already acquired by another thread or process then the thread will **wait** until the mutex object gets unlocked. |
 
@@ -667,6 +668,14 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 4. `ScheduledExecutor`
    - Used for scheduling tasks to run at a specific time or with a fixed delay between executors.
 
+```java
+ExecutorService executor = Executors.newSingleThreadExecutor();
+ExecutorService executor = Executors.newFixedThreadPool(3);
+
+ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+executor.scheduleAtFixedRate(new StockMarketUpdater(), 1000, 5000, TimeUnit.MILLISECONDS); // StockMarketUpdater implements Runnable interface
+```
+
 ---
 
 ## `Runnable` and `Callable` Interfaces
@@ -677,7 +686,6 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 | Method       | `void run()`                           | `V call()`                                                      |
 | Return type  | None(void)                             | Can return a value of type V                                    |
 | Usage        | Used for fire-and-forget tasks         | Used when a result is needed                                    |
-| Supported By | `Executor` and `ExecutorService`       | `ExecutorService` and `ScheduledExecutorService`                |
 
 - `Runnable` is used when the execution has started but the calling thread doesn't need to wait for a result.
 - `Callable` is used when a result is needed, and it provides a way to retrieve the result of the _computation_.
@@ -688,7 +696,7 @@ atomicReference.compareAndSet("Hello", "Hi"); // Atomically compares the value w
 
 - `Callable` is a function interface with a single method `call()`, which returns a value of type `V` (the result of the computation).
 - When a `Callable` task is submitted to an `ExecutorService` using the `submit()` method, it returns a `Future` object that represents the result of the computation.
-  - `executorService.submit()` can handle `Runnable` interfaces as well as `Callable interfaces.
+  - `executorService.submit()` can handle `Runnable` interfaces as well as `Callable` interfaces.
   - `executorService.submit()` can handle a `Future<T>` return value and we can get the `T` value with `get()` on the future object.
 - The `Future` object provides methods to check if the computation is complete, retrieve the result using the `get()` method (which blocks until the result is available), and cancel the task if needed.
 
@@ -790,7 +798,7 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 - Main features and usage patterns of the `Exchanger` class:
   - `Exchanger` class is a **generic** class that takes a type parameter specifying the type of objects to be exchanged. E.g., `Exchanger<Integer>`
   - `Exchanger` class provides 2 methods: `exchange()` and `exchange(V value)`.
-  - The `exchange()` method is a *blocking* operation that waits for another thread to arrive at the exchange point before proceeding with the exchange. It returns the object received from the other thread.
+  - The `exchange()` method is a _blocking_ operation that waits for another thread to arrive at the exchange point before proceeding with the exchange. It returns the object received from the other thread.
   - The `exchange(V value)` method allows a thread to exchange its own object with the other thread. It waits for the other thread to arrive at the exchange point, exchanges the objects, and returns the object received from the other thread.
   - If 1 of threads arrives at the exchange point before the other, it will wait until the other thread arrives. This synchronization ensures that both threads perform the exchange together.
   - If only 1 thread calls the `exchange()` method, it will be blocked until another thread arrives.
