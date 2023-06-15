@@ -817,3 +817,36 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - Write operations are **atomic**, threads must wait for each other to update the list.
 - `CopyOnWriteArrayList` trades off memory consumption and write operation cost for efficient concurrent read access. It is important to choose the appropriate data structure based on the specific requirements of your application.
 
+# Parallel Computing
+
+- When we use standard **sequential approach**, then the programming language executes the operations one after another.
+- **Multithreaded approach** uses multiple threads but these threads are executed with the time-slicing algorithm.
+- With **parallel algorithms**, we execute different tasks on different processors (or processor cores) simultaneously.
+- Some problems are sequential by default so we are unable to apply parallelization.
+
+---
+- Multithreading is used to execute independent tasks without blocking other tasks.
+- Parallelization is used to **speed up a given application**.
+---
+
+- It depends on the **operating system** on how the threads will be executed.
+- If there is just a single processor core, then the time-slicing algorithm executes the threads (multithreading).
+- If there are multiple processor cores, then the operating system may **execute the threads in parallel**.
+
+## Parallel Algorithm vs Sequential Algorithm
+
+|Parallel Algorithm|Sequential Algorithm|
+|---|---|
+|Can divide the problem into multiple **independent subsets**.|Steps are usually depending on each other.|
+|Can execute the operations on these subsets simultaneously.|Unable to execute the operations independently.|
+|Examples include checking prime numbers, sorting or searching algorithms|Examples include numerical methods (differential equations or numerical integral)|
+
+## Problems with Parallel Computing
+
+- Communication
+  - For sequential algorithms, we measure the running time and memory complexity of the algorithms.
+  - For parallel algorithm, have to consider the **communication factor** between the threads (parallel slowdown).
+- Load Balance
+  - Have to ensure to split the work evenly among the processors.
+  - Have to ensure that processors should not wait for each other to finish - every processor should do the same amount of work.
+  - E.g., Finding all prime factors for numbers 0 - 1000. We would assume one processor finds prime factors from 0 - 500 and the other from 501 - 1000. But as the number gets higher, it takes a longer time to find the prime factors. So the processor running for 0 - 500 will be completed earlier.
