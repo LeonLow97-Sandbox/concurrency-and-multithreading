@@ -823,6 +823,7 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 - **Multithreaded approach** uses multiple threads but these threads are executed with the time-slicing algorithm.
 - With **parallel algorithms**, we execute different tasks on different processors (or processor cores) simultaneously.
 - Some problems are sequential by default so we are unable to apply parallelization.
+- Sometimes parallel algorithms are slower than sequential implementations because of the communication between the threads which slows down the application.
 
 ---
 - Multithreading is used to execute independent tasks without blocking other tasks.
@@ -847,7 +848,7 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - For sequential algorithms, we measure the running time and memory complexity of the algorithms.
   - For parallel algorithm, have to consider the **communication factor** between the threads (parallel slowdown).
 - Load Balance
-  - Have to ensure to split the work evenly among the processors.
+  - Have to ensure to split the work evenly among the processors (CPU or CPU cores).
   - Have to ensure that processors should not wait for each other to finish - every processor should do the same amount of work.
   - E.g., Finding all prime factors for numbers 0 - 1000. We would assume one processor finds prime factors from 0 - 500 and the other from 501 - 1000. But as the number gets higher, it takes a longer time to find the prime factors. So the processor running for 0 - 500 will be completed earlier.
 
@@ -860,3 +861,14 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   2. Sort these sub-arrays recursively with merge sort again.
   3. If there is only a single item left in the sub-array, consider it to be sorted by definition (or can use insertion sort on small arrays).
   4. Merge the sub-arrays to get the final sorted array.
+
+# Sum Problem
+
+- Sequential Sum
+  - the standard sequential sum function considers all the items in **O(N) linear running** time complexity.
+- Parallel Sum
+  - the parallel sum function **splits the original array into N chunks** and does linear searches independently.
+  - The number of processors defines the value of N.
+  - If we have 2 processors (or cores), then split the original array into 2 and do sum operation in a parallel manner.
+  - If we have 3 processors (or cores), then split the original array into 3 and do sum operation in a parallel manner.
+  - **CRUCIAL**: final operation is sequential so the threads have to wait for each other to finish.

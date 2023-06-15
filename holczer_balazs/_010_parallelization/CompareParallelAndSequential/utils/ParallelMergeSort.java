@@ -41,7 +41,9 @@ public class ParallelMergeSort {
         return new Thread() {
             @Override
             public void run() {
-                parallelMergeSort(low, high, numOfThreads / 2);
+                // numOfThreads divide by 2 to effectively distribute work among the available processing cores
+                // in a more balanced manner to prevent excessive thread creation and ensure efficient utilization of resources.
+                parallelMergeSort(low, high, numOfThreads / 2); 
             }
         };
     }

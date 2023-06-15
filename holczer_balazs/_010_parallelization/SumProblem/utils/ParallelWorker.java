@@ -10,21 +10,20 @@ public class ParallelWorker extends Thread {
     public ParallelWorker(int[] nums, int low, int high) {
         this.nums = nums;
         this.low = low;
-        this.high = Math.min(nums.length, high);
-    }
-
-
-    @Override
-    public void run() {
-        partialSum = 0;
-
-        for (int i = 0; i < high; i++) {
-            partialSum += nums[i];
-        }
+        this.high = Math.min(high, nums.length);
     }
 
     public int getPartialSum() {
         return partialSum;
     }
 
+    @Override
+    public void run() {
+
+        partialSum = 0;
+
+        for (int i = low; i < high; i++) {
+            partialSum += nums[i];
+        }
+    }
 }
