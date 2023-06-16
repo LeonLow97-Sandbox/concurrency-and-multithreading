@@ -901,3 +901,8 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 
 - *FORK*: splits the given task into smaller sub-tasks that can be executed in a parallel manner.
 - *JOIN*: split tasks are being executed and after all of them are finished, they are merged into 1 result.
+
+## Fibonacci Number (Thread Optimization)
+
+<img src="./pics/3_threads_fib.png" width="70%" />
+<img src="./pics/2_threads_fib.png" width="70%" />
