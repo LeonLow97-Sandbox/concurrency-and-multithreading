@@ -872,3 +872,32 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - If we have 2 processors (or cores), then split the original array into 2 and do sum operation in a parallel manner.
   - If we have 3 processors (or cores), then split the original array into 3 and do sum operation in a parallel manner.
   - **CRUCIAL**: final operation is sequential so the threads have to wait for each other to finish.
+
+# Fork-Join Framework
+
+- Fork-Join framework is an implementation of the `ExecutorService` interface for parallel execution.
+- Based on the **divide-and-conquer** approach, where a problem is divided into smaller sub-problems that can be solved independently.
+- Larger tasks **can be divided into smaller ones** and then we have to combine the sub-solutions into the final solution of the problem.
+- **IMPORTANT**: sub-tasks have to be independent in order to be executed in parallel.
+- Fork-Join framework dynamically manages the workload distribution and thread coordination, automatically adjusting the number of threads based on the available processors.
+- It provides a simple and efficient way to implement parallel algorithms and take advantage of multi-core processors for improved performance.
+
+---
+- The framework consists of 2 main components: `ForkJoinPool` and `ForkJoinTask`
+  - `ForkJoinPool`: thread pool that manages a pool of worker threads to execute `ForkJoinTasks`.
+  - `ForkJoinPool` creates a fix number of threads, usually the number of **CPU cores**.
+  - These threads are executing the tasks but if a thread has no task, it can "steal" a task from more busy threads. Tasks are distributed to all threads in the thread pool.
+  - Fork-Join Framework can handle the problem of **Load Balancing** quite efficiently.
+  - `ForkJoinTask`: abstract class that represents a task that can be executed asynchronously and potentially split into smaller subtasks.
+- 2 important subclasses of `ForkJoinTask` are `RecursiveAction` and `RecursiveTask`:
+  - `RecursiveTask<T>` returns a generic `T` type. 
+  - `RecursiveAction` represents a task that does not return a result, while `RecursiveTask` represents a task that does return a result.
+- To use the Fork-Join Framework, create a subclass of `RecursiveAction` or `RecursiveTask` and override the `compute()` method.
+- Methods
+  - `compute()`: divide the task into smaller subtasks, either by directly splitting the task or by creating new instances of the subclass.
+  - `fork()`: used to asynchronously execute a subtask by adding it to the pool.
+  - `join()`: used to wait for the completion of a subtask and obtain its result.
+---
+
+- *FORK*: splits the given task into smaller sub-tasks that can be executed in a parallel manner.
+- *JOIN*: split tasks are being executed and after all of them are finished, they are merged into 1 result.
