@@ -906,3 +906,33 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 
 <img src="./pics/3_threads_fib.png" width="70%" />
 <img src="./pics/2_threads_fib.png" width="70%" />
+
+## Parallelization vs Sequential (Merge Sort Example)
+
+- For large arrays, parallelization can be faster than sequential.
+- For small arrays, sequential can be faster than parallelization.
+
+---
+#### For Large Arrays
+
+1. **Overhead**
+  - Parallelization introduces additional overhead due to the need for thread creation, synchronization, and coordination among threads.
+  - This overhead becomes noticeable for small arrays, but for large arrays, it can be offset by the benefits of parallelism.
+2. **Utilizing multi-core processors**
+  - Parallelization allows the workload to be divided among multiple threads, taking advantage of the parallel processing capabilities of modern multi-core processors.
+  - This can lead to significant speedup for large arrays as multiple cores work concurrently.
+3. **Increased throughput**:
+  - By dividing the task into smaller subtasks and assigning them to different threads, parallelization increases the overall throughput. This can result in faster execution for larger arrays.
+---
+#### For Small Arrays
+
+1. **Overhead Dominates**
+  - The overhead introduced by parallelization, such as thread creation and synchronization, becomes relatively more significant compared to the actual sorting task for small arrays.
+  - This overhead can outweigh the benefits of parallelism and result in slower execution compared to a sequential merge sort.
+2. **Limited Parallelism**
+  - Small arrays may not provide enough work to fully utilize all available processor cores.
+  - In such cases, the overhead of parallelization becomes more noticeable, as some cores may remain idle or underutilized.
+3. **Sequential Simplicity**
+  - Sequential merge sort has a simpler implementation, without the need for thread coordination and synchronization.
+  - This simplicity can result in faster execution for small arrays as it avoids the overhead associated with parallelization.
+---
