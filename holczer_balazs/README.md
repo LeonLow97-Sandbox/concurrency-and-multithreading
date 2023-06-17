@@ -1011,3 +1011,29 @@ List<Integer> result = numbers.stream()
 ## Converting streams to parallel
 
 - Call the `parallel()` method in the stream
+
+## `MapReduce`
+
+- `MapReduce` is a programming model. A way of structuring the computation that allows it easily to be run on lots of nodes (servers).
+  - Can make an algorithm parallel.
+- Fundamental building block of `BigData`.
+- For example, we want to sort a huge array of integers, can do it with sequential merge sort in O(N log N).
+  - With fork-join framework, can implement it in a parallel manner by assigning processor cores to run threads in parallel. This is with 1 JVM.
+  - With `MapReduce`, can implement it in a parallel manner in different servers with different JVMs. Faster operation.
+  - `MapReduce` deals with different servers (computers), faster algorithm, not dealing with different processor cores.
+  - These servers form a cluster or directed graph, that's why the servers are usually called nodes.
+
+|Methods|Description|Output|
+|---|---|---|
+|`Map`|the input is a dataset. For example, array of integers or Iris-dataset we want to classify.|`List<Key, Value>` pairs|
+|`Shuffle & Sort`|combines all key-value pairs with same keys + sort them|`List<Key,List<Value>>` pairs|
+|`Reduce`|combines the sub-results|`List<Key, Value> pairs|
+
+<img src="./pics/map_reduce.png" width="90%" />
+
+## What is the difference between `MapReduce` and `Fork-Join`?
+
+- Fork-Join is designed to work on a single JVM while `MapReduce` is designed to work on a large cluster of nodes (servers, machines) multiple JVMs.
+- Fork-Join splits the original task into several sub-tasks: it is a recursive approach and there may be inter-fork communications.
+- `MapReduce` does only ` split: these split sub-tasks do not communicate at all, they are independent on different servers and different JVMs.
+- `MapReduce` is massively scalable.
