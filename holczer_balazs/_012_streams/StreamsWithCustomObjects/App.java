@@ -20,21 +20,27 @@ public class App {
 
         // books.stream().forEach(System.out::println);
         // List<String> result = books.stream().filter(book -> book.getType() == Type.NOVEL)
-        //         .sorted(Comparator.comparing(Book::getPages))
-        //         .map(Book::getAuthor)
-        //         .collect(Collectors.toList());
+        // .sorted(Comparator.comparing(Book::getPages))
+        // .map(Book::getAuthor)
+        // .collect(Collectors.toList());
         // result.stream().forEach(System.out::println);
 
         // grouping by type
-        Map<Type, List<Book>> booksByType = books.stream().collect(Collectors.groupingBy(Book::getType));
+        Map<Type, List<Book>> booksByType =
+                books.stream().collect(Collectors.groupingBy(Book::getType));
 
         // find 2 longest books (based on number of pages)
         // .map() changes the type
         List<String> longestBooks = books.stream().filter(p -> p.getPages() > 500)
-            .map(Book::getTitle).limit(2).collect(Collectors.toList());
+                .map(Book::getTitle).limit(2).collect(Collectors.toList());
 
         // booksByType.entrySet().stream().forEach(System.out::println);
         longestBooks.stream().forEach(System.out::println);
+
+        /**
+         * Task: Select all the books where the title is made up of exactly 2 words.
+         */
+        books.stream().filter(book -> book.getTitle().split(" ").length == 2).collect(Collectors.toList()).forEach(System.out::println);
     }
 
 }
