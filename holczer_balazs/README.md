@@ -936,3 +936,21 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
   - Sequential merge sort has a simpler implementation, without the need for thread coordination and synchronization.
   - This simplicity can result in faster execution for small arrays as it avoids the overhead associated with parallelization.
 ---
+
+# Streams
+
+- Streams rely on **lambda expressions*.
+- Can construct **parallel operations** easily.
+- A stream is a sequence of elements from a source that supports **data processing** operations.
+  - data structures are about storing items and **streams are about computation**.
+- Streams support *database-like operations* and common operations from functional programming languages (filter, map, reduce etc).
+- Stream operations can be executed either **sequentially** or in **parallel**.
+
+---
+- Pipelining
+  - Can define **intermediate operations** that return a stream as well, allowing multiple operations to be **chained** (similar to database queries). 
+<img src="./pics/stream_api_flow.png" width="90%" />
+---
+- Internal Iteration
+  - Collections are iterated explicitly with iterators (external iteration but we can use a **different approach** with streams).
+---
