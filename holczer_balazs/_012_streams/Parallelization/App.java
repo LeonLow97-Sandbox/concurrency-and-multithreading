@@ -1,8 +1,8 @@
-package holczer_balazs._012_streams.Optionals;
+package holczer_balazs._012_streams.Parallelization;
 
 import java.util.stream.LongStream;
 
-public class App4 {
+public class App {
 
     public static void main(String[] args) {
         // parallel() - because we have to make sure that the given
