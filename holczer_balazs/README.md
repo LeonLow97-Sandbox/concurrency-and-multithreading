@@ -994,3 +994,17 @@ List<Integer> result = numbers.stream()
 - Avoids unnecessary computation. If there are 1000 elements in the list, but only 2 of them are even, the traditional collection approach would iterate over all 1000 elements, while the stream approach would only process the 2 even numbers.
 
 ---
+
+## Stream Methods
+
+|Method|Description|
+|---|---|
+|`filter()`|Filters the elements of a stream based on a given predicate, returning a new stream that contains only the elements satisfying the predicate.|
+|`map()`|Transforms each element of a stream into another object using a provided function, returning a new stream with the transformed elements.|
+|`flatMap()`|Flattens a stream of collections or nested streams into a single stream by merging the elements of the nested streams.|
+|`distinct()`|Returns a stream with distinct elements, removing duplicates based on the elements' `equals()` method.|
+|`sorted()`|Sorts the elements of a stream in their natural order or using a custom comparator. Returns a new stream with the sorted elements.|
+|`sorted(Comparator)`|Sorts the elements of a stream using a custom comparator to determine their order. Returns a new stream with the sorted elements.|
+|`limit()`|Returns a stream that is truncated to a maximum size specified by the given parameter. Only the first `n` elements are included in the new stream.|
+|`reduce()`|Performs a reduction operation on the elements of a stream, using a binary operator to accumulate the elements into a single result. E.g., finding the sum of all the integers in the stream.|
+
