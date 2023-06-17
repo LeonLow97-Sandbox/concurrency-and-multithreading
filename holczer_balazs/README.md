@@ -1008,3 +1008,6 @@ List<Integer> result = numbers.stream()
 |`limit()`|Returns a stream that is truncated to a maximum size specified by the given parameter. Only the first `n` elements are included in the new stream.|
 |`reduce()`|Performs a reduction operation on the elements of a stream, using a binary operator to accumulate the elements into a single result. E.g., finding the sum of all the integers in the stream.|
 
+## Converting streams to parallel
+
+- Call the `parallel()` method in the stream
