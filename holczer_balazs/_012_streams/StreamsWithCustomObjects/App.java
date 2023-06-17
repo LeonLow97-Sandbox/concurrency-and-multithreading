@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import utils.*;
 
@@ -18,11 +19,22 @@ public class App {
         books.add(new Book("The Stranger", "Albert Camus", 560, Type.NOVEL));
 
         // books.stream().forEach(System.out::println);
-        List<String> result = books.stream().filter(book -> book.getType() == Type.NOVEL)
-                .sorted(Comparator.comparing(Book::getPages))
-                .map(Book::getAuthor)
-                .collect(Collectors.toList());
-        result.stream().forEach(System.out::println);
+        // List<String> result = books.stream().filter(book -> book.getType() == Type.NOVEL)
+        //         .sorted(Comparator.comparing(Book::getPages))
+        //         .map(Book::getAuthor)
+        //         .collect(Collectors.toList());
+        // result.stream().forEach(System.out::println);
+
+        // grouping by type
+        Map<Type, List<Book>> booksByType = books.stream().collect(Collectors.groupingBy(Book::getType));
+
+        // find 2 longest books (based on number of pages)
+        // .map() changes the type
+        List<String> longestBooks = books.stream().filter(p -> p.getPages() > 500)
+            .map(Book::getTitle).limit(2).collect(Collectors.toList());
+
+        // booksByType.entrySet().stream().forEach(System.out::println);
+        longestBooks.stream().forEach(System.out::println);
     }
 
 }
