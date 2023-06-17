@@ -954,3 +954,43 @@ List<Integer> nums = Collections.synchronizedList(new ArrayList<>());
 - Internal Iteration
   - Collections are iterated explicitly with iterators (external iteration but we can use a **different approach** with streams).
 ---
+
+## Streams and Collections
+
+- Collections are essentially data structures in the RAM.
+- Collections need the whole data in advance - every element in the collection must be computed before it can be added to the collection.
+  - This is why it takes more time to handle a collection. (*eager* collections)
+- Streams provide interfaces to data structures representing a **sequenced set of values** (like video frames being streamed over the Internet).
+- Streams are fixed data structures whose elements are **computed on demand** (*lazy* collections.)
+
+---
+#### Example: Filter out the even numbers and map to their squares in a list of integers
+
+- Traditional Collections
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+List<Integer> result = new ArrayList<>();
+
+for (int num : numbers) {
+    if (num % 2 == 0) {
+        int square = num * num;
+        result.add(square);
+    }
+}
+```
+
+- Java Streams
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+List<Integer> result = numbers.stream()
+    .filter(num -> num % 2 == 0)
+    .map(num -> num * num)
+    .collect(Collectors.toList());
+```
+
+- The stream operations `filter` and `map` are chained together, but no computation is performed until the terminal operation `collect` is invoked.
+- The operations are evaluated **lazily**, meaning that each element is processed only as needed.
+- Avoids unnecessary computation. If there are 1000 elements in the list, but only 2 of them are even, the traditional collection approach would iterate over all 1000 elements, while the stream approach would only process the 2 even numbers.
+
+---
