@@ -62,6 +62,25 @@ This is the second thing to be printed!
 - Race conditions occur when multiple GoRoutines try to access the same data.
 - Can be difficult to spot when reading code.
 - Go allows us to check for them when running a program, of when testing our code with go test.
+- In the example code below, we run into a race condition where 2 go routines are trying to update `msg` variable that is a shared resource. Run `go run -race .` to see the race condition.
+
+```go
+func updateMessage(s string) {
+	defer wg.Done()
+	msg = s
+}
+
+func main() {
+	msg = "Hello World!"
+
+	wg.Add(2)
+	go updateMessage("Hello, universe!")
+	go updateMessage("Hello, cosmos!")
+	wg.Wait()
+
+	fmt.Println(msg)
+}
+```
 
 ## Channels
 
