@@ -54,6 +54,17 @@ This is the second thing to be printed!
   - `mutex.Lock()` is used to acquire the lock and ensure exclusive access to the critical section.
   - `mutex.Unlock()` is used to release the lock after the critical section is executed.
     - A critical section is a part of the program the access shared resources and must be executed atomically.
+- In the example code below, we added mutex with locks on the shared data in multiple goroutines to ensure data integrity.
+
+```go
+func updateMessage(s string, m *sync.Mutex) {
+	defer wg.Done()
+
+	m.Lock()
+	msg = s
+	m.Unlock()
+}
+```
 
 ## Race Conditions
 
@@ -88,3 +99,8 @@ func main() {
 - Can talk to each other.
 - Go's philosophy: having things share memory by communicating, rather than communicating by sharing memory.
 - The Producer/Consumer problem.
+
+## Testing Race Conditions in Go
+
+- Use `go run -race .` to check if there are any race conditions
+- Use `go test -race .` for testing race conditions.
