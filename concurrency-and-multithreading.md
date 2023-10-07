@@ -51,3 +51,23 @@
 
 - Concurrency is the ability of your program to "deal" (not doing) with many things at once and is achieved through multithreading.
 - Do not confuse concurrency with parallelism which is about "doing" many things at once.
+
+## Locking
+
+- Locks are a synchronization technique used to **limit access to a resource** in an environment where there are many threads of execution.
+- A good example of a lock is a **mutex**
+
+## Mutex
+
+- Mutex implies "mutual exclusion".
+- A mutex is used to guard shared data such as a linked-list, an array or any simple primitive type.
+- A mutex allows only a single thread to access a resource.
+
+# Issues Involved with Multiple Threads
+
+## Race Conditions
+
+- **Critical Section** is any price of code that has the possibility of being executed concurrently by more than 1 thread of the application and exposes any shared data or resources used by the application for access.
+- Race conditions happen when threads run through critical sections without thread synchronization (e.g., using locks).
+- The threads "race" through the critical sections to write or read shared resources and depending on the order in which threads finish the "race", the program output changes.
+- In a race condition, threads access shared resources or program variables that might be worked on by other threads at the same time *causing the application data to be inconsistent*! BAD!
