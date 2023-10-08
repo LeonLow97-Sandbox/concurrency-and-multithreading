@@ -104,3 +104,8 @@ func main() {
 
 - Use `go run -race .` to check if there are any race conditions
 - Use `go test -race .` for testing race conditions.
+
+## The Producer-Consumer problem
+
+- [Link](https://www.educative.io/answers/what-is-the-producer-consumer-problem)
+- [Wikipedia](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem)
