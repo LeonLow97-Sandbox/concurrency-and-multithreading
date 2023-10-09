@@ -135,7 +135,7 @@ func main() {
 				color.Green("Order #%d is out for delivery!", i.pizzaNumber)
 			} else {
 				color.Red(i.message)
-				color.Green("The customer is really mad!")
+				color.Red("The customer is really mad!")
 			}
 		} else {
 			color.Cyan("Done making pizzas...")
