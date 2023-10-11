@@ -59,3 +59,14 @@ if !ok {
         // avoiding deadlock
     }
 ```
+
+## Buffered Channels
+
+- `make(chan int, <size>)` creating a buffered channel with a size. E.g., `make(chan int 10)` buffered channel with capacity of 10 so the channel can hold up to 10 elements without the need for a corresponding receiver to be ready.
+- Buffered channels are useful if:
+    - Knowing the number of GoRoutines:
+        - If you launch 10 goroutines to perform some tasks concurrently, a buffered channel with a capacity of 10 can be used to avoid deadlocks. Each goroutine can send a message to the channel, and the main program can wait for all 10 messages to be received.
+    - Limit the Number of Goroutines:
+        - Once the buffer is full, any additional attempts to send data will block until there is space in the channel.
+    - Limit the Amount of Work Queued Up:
+        - If the channel is full, additional tasks may need to wait until there is space in the buffer.
