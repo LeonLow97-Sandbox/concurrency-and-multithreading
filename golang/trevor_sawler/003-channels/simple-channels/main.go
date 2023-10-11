@@ -7,7 +7,10 @@ import (
 
 func shout(ping <-chan string, pong chan<- string) {
 	for {
-		s := <-ping
+		s, ok := <-ping
+		if !ok {
+			// tells if channel is closed or open
+		}
 
 		pong <- s
 	}
