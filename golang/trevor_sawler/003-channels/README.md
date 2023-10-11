@@ -38,3 +38,24 @@ if !ok {
 	// tells if channel is closed or open
 }
 ```
+
+## `select` statement
+
+- If there are multiple cases with the same condition, it chooses to execute one at random.
+  - For example, cases 1 and 2 have the same condition of `<-channel1`, the program chooses one of the cases at random to execute.
+- Use `default` to avoid deadlocks.
+
+```go
+    select {
+    case s1 := <-channel1:
+        fmt.Println("Case 1:", s1)
+    case s2 := <-channel1:
+        fmt.Println("Case 2:", s2)
+    case s3 := <-channel2:
+        fmt.Println("Case 3:", s3)
+    case s4 := <-channel2:
+        fmt.Println("Case 4:", s4)
+    // default:
+        // avoiding deadlock
+    }
+```
