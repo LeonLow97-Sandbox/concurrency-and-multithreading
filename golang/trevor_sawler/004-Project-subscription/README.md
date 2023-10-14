@@ -22,3 +22,37 @@ go get github.com/go-chi/chi/v5
 ```
 docker exec -it 004-project-subscription_postgres_1 psql -U postgres -d concurrency
 ```
+
+## Running cleanup tasks in Golang with Concurrency
+
+- `syscall.SIGINT` (Interrupt)
+    - This signal is typically sent by pressing CTRL+C in the terminal where a program is running.
+    - It is a graceful way to interrupt the execution of a program, allowing it to perform cleanup operations before terminating.
+- `syscall.SIGTERM` (Termination)
+    - This signal is a generic way to request the termination of a process.
+    - It can be used to stop a running program, and like `SIGINT`, it allows the perform to perform cleanup operations before exiting.
+
+```go
+func main() {
+    go listenForShutdown()
+}
+
+func (app *Config) listenForShutdown() {
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	app.shutdown()
+	os.Exit(0)
+}
+
+func (app *Config) shutdown() {
+	// perform any cleanup tasks
+	app.InfoLog.Println("would run cleanup tasks...")
+
+	// block until waitgroup is empty (ensure all background tasks are completed)
+	app.Wait.Wait()
+
+	app.InfoLog.Println("closing channels and shutting down application...")
+}
+
+```
