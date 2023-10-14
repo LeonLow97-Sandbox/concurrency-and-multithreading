@@ -69,3 +69,10 @@ func (app *Config) shutdown() {
 - Sending email can slow things down
 - Send it in the background, using 2 channels.
 - Adding cleanup tasks on app shutdown
+
+## Users & Plans
+
+- Adding & validating user accounts
+- Signed URLs in email
+- Displaying the list of available subscriptions
+
