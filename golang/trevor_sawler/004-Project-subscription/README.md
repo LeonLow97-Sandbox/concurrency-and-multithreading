@@ -23,6 +23,10 @@ go get github.com/go-chi/chi/v5
 docker exec -it 004-project-subscription_postgres_1 psql -U postgres -d concurrency
 ```
 
+- Application account email and password:
+    - email address: admin@example.com
+    - password: verysecret
+
 ## Running cleanup tasks in Golang with Concurrency
 
 - `syscall.SIGINT` (Interrupt)
