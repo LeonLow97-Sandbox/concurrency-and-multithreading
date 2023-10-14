@@ -15,6 +15,8 @@ go get github.com/jackc/pgx/v4
 go get github.com/alexedwards/scs/v2
 go get github.com/alexedwards/scs/redisstore
 go get github.com/go-chi/chi/v5
+go get github.com/vanng822/go-premailer/premailer
+go get github.com/xhit/go-simple-mail/v2
 ```
 
 - To access psotgresql inside the container.
@@ -26,6 +28,7 @@ docker exec -it 004-project-subscription_postgres_1 psql -U postgres -d concurre
 - Application account email and password:
     - email address: admin@example.com
     - password: verysecret
+- Go to `localhost:8025` to access MailHog.
 
 ## Running cleanup tasks in Golang with Concurrency
 
@@ -60,3 +63,9 @@ func (app *Config) shutdown() {
 }
 
 ```
+
+## Sending Email Concurrently
+
+- Sending email can slow things down
+- Send it in the background, using 2 channels.
+- Adding cleanup tasks on app shutdown
