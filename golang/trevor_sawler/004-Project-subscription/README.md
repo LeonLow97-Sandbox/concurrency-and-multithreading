@@ -17,6 +17,8 @@ go get github.com/alexedwards/scs/redisstore
 go get github.com/go-chi/chi/v5
 go get github.com/vanng822/go-premailer/premailer
 go get github.com/xhit/go-simple-mail/v2
+go get github.com/phpdave11/gofpdf
+go get github.com/phpdave11/gofpdf/contrib/gofpdi
 ```
 
 - To access psotgresql inside the container.
@@ -26,18 +28,18 @@ docker exec -it 004-project-subscription_postgres_1 psql -U postgres -d concurre
 ```
 
 - Application account email and password:
-    - email address: admin@example.com
-    - password: verysecret
+  - email address: admin@example.com
+  - password: verysecret
 - Go to `localhost:8025` to access MailHog.
 
 ## Running cleanup tasks in Golang with Concurrency
 
 - `syscall.SIGINT` (Interrupt)
-    - This signal is typically sent by pressing CTRL+C in the terminal where a program is running.
-    - It is a graceful way to interrupt the execution of a program, allowing it to perform cleanup operations before terminating.
+  - This signal is typically sent by pressing CTRL+C in the terminal where a program is running.
+  - It is a graceful way to interrupt the execution of a program, allowing it to perform cleanup operations before terminating.
 - `syscall.SIGTERM` (Termination)
-    - This signal is a generic way to request the termination of a process.
-    - It can be used to stop a running program, and like `SIGINT`, it allows the perform to perform cleanup operations before exiting.
+  - This signal is a generic way to request the termination of a process.
+  - It can be used to stop a running program, and like `SIGINT`, it allows the perform to perform cleanup operations before exiting.
 
 ```go
 func main() {
@@ -76,3 +78,7 @@ func (app *Config) shutdown() {
 - Signed URLs in email
 - Displaying the list of available subscriptions
 
+## Adding Concurrency
+
+- Generate an invoice
+- Generate a user manual as a PDF

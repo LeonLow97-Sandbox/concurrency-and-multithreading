@@ -34,19 +34,19 @@ func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	// create channels
-
 	// create waitgroup
 	wg := sync.WaitGroup{}
 
 	// set up the application config
 	app := Config{
-		Session:  session,
-		DB:       db,
-		InfoLog:  infoLog,
-		ErrorLog: errorLog,
-		Wait:     &wg,
-		Models:   data.New(db),
+		Session:       session,
+		DB:            db,
+		InfoLog:       infoLog,
+		ErrorLog:      errorLog,
+		Wait:          &wg,
+		Models:        data.New(db),
+		ErrorChan:     make(chan error),
+		ErrorChanDone: make(chan bool),
 	}
 
 	// set up mail
@@ -56,8 +56,23 @@ func main() {
 	// listen for signals (SIGINT and SIGTERM)
 	go app.listenForShutdown()
 
+	// listen for errors
+	go app.listenForErrors()
+
 	// listen for web connections
 	app.serve()
+}
+
+func (app *Config) listenForErrors() {
+	for {
+		select {
+		case err := <-app.ErrorChan:
+			// notify slack channel, do whatever u want
+			app.ErrorLog.Println(err)
+		case <- app.ErrorChanDone:
+			return
+		}
+	}
 }
 
 func (app *Config) serve() {
@@ -159,16 +174,19 @@ func (app *Config) listenForShutdown() {
 func (app *Config) shutdown() {
 	// perform any cleanup tasks
 	app.InfoLog.Println("would run cleanup tasks...")
-	
+
 	// block until waitgroup is empty (ensure all background tasks are completed)
 	app.Wait.Wait()
 
 	app.Mailer.DoneChan <- true // execute donechan after waitgroup is empty to ensure all mails are sent
+	app.ErrorChanDone <- true
 
 	app.InfoLog.Println("closing channels and shutting down application...")
 	close(app.Mailer.MailerChan)
 	close(app.Mailer.ErrorChan)
 	close(app.Mailer.DoneChan)
+	close(app.ErrorChan)
+	close(app.ErrorChanDone)
 }
 
 func (app *Config) createMail() Mail {
