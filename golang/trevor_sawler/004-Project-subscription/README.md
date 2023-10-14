@@ -82,3 +82,10 @@ func (app *Config) shutdown() {
 
 - Generate an invoice
 - Generate a user manual as a PDF
+
+## Testing Concurrency
+
+- Update our models to be more testable
+- Test routes
+- Test the renderer
+- Test handlers
